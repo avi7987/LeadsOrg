@@ -1,0 +1,24 @@
+# ============================================================
+#  סודות וחיבורים — לעולם לא להעלות לגיטהאב!
+# ============================================================
+worker/.env
+.env
+worker/.wwebjs_auth/
+worker/.wwebjs_cache/
+worker/qr.png
+worker/qr-display.html
+
+# Node
+node_modules/
+worker/node_modules/
+
+# לוגים / זמניים
+*.log
+_preview_leads.html
+
+# מערכת הפעלה
+.DS_Store
+Thumbs.db
+
+# הגדרות Claude מקומיות
+.claude/settings.local.json
