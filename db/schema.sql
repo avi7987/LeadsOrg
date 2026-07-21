@@ -38,6 +38,9 @@ create table if not exists leads (
   phone         text,
   event_date    text,                            -- טקסט חופשי בשלב ראשון (לדוגמה "22.10.26")
   service       text,
+  location      text,                            -- מקום האירוע
+  price         numeric,                         -- המחיר שנסגר עם הלקוחה (₪)
+  deposit       numeric,                         -- מקדמה ששולמה (₪) — יורדת מהסכום הסופי
   note          text        default '',
   status        text        default 'new'
                 check (status in ('new','noanswer','followup','closed','lost')),

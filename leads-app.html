@@ -490,6 +490,16 @@
   .field-row{ display:flex; gap:12px; }
   .field-row .field{ flex:1; }
 
+  .balance-line{
+    display:none; align-items:center; justify-content:space-between;
+    background: var(--wa-soft); color:#3F7E56;
+    border-radius:12px; padding:10px 14px; margin:-4px 0 4px;
+    font-size:13px; font-weight:600;
+  }
+  .balance-line.show{ display:flex; }
+  .balance-line b{ font-size:15px; font-family:'Frank Ruhl Libre',serif; }
+  :root[data-theme="dark"] .balance-line{ color:#93CCA4; }
+
   .section-label{
     font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
     color:var(--gold-deep); margin:22px 0 12px;
@@ -1277,6 +1287,11 @@
         <div class="field"><label>סטטוס</label><select id="add-status"></select></div>
       </div>
       <div class="field"><label>מתי לחזור</label><input type="date" id="add-followup"></div>
+      <div class="field"><label>מקום האירוע</label><input type="text" id="add-location" placeholder="אולם / כתובת / עיר"></div>
+      <div class="field-row">
+        <div class="field"><label>מחיר שנסגר (₪)</label><input type="number" id="add-price" min="0" placeholder="0"></div>
+        <div class="field"><label>מקדמה ששולמה (₪)</label><input type="number" id="add-deposit" min="0" placeholder="0"></div>
+      </div>
       <div class="field"><label>הערות</label><textarea id="add-note" placeholder="כל מידע נוסף..."></textarea></div>
     </div>
     <div class="modal-foot">
@@ -1359,11 +1374,17 @@ function fmtDate(v){
 }
 const isTodayLead = l => !!l.followup_date && l.followup_date.slice(0,10) === todayISO;
 
+// כסף: מספר → "₪1,500" (ריק אם אין)
+const fmtMoney = v => (v==null || v==='' || isNaN(v)) ? '' : '₪' + Number(v).toLocaleString('he-IL');
+// יתרה לתשלום = מחיר פחות מקדמה (רק אם יש מחיר)
+const balanceOf = l => (l.price==null || l.price==='') ? null : Number(l.price) - Number(l.deposit||0);
+
 // שורת DB → אובייקט שה-UI יודע להציג
 function mapLead(r){
   return {
     id: r.id, source: r.source||'ידני', name: r.name||'', phone: r.phone||'',
     event: r.event_date || '—', service: r.service||'', note: r.note||'',
+    location: r.location||'', price: r.price ?? null, deposit: r.deposit ?? null,
     status: r.status||'new',
     followup_date: r.followup_date || null,
     followup: fmtDate(r.followup_date),
@@ -1652,6 +1673,15 @@ function openDrawer(id){
     <div class="field"><label>סטטוס</label>
       <select id="edit-status">${STATUSES.map(s=>`<option value="${s.id}" ${s.id===l.status?'selected':''}>${s.label}</option>`).join('')}</select>
     </div>
+
+    <div class="section-label">סגירה ותשלום</div>
+    <div class="field"><label>מקום האירוע</label><input id="edit-location" type="text" value="${esc(l.location)}" placeholder="אולם / כתובת / עיר"></div>
+    <div class="field-row">
+      <div class="field"><label>מחיר שנסגר (₪)</label><input id="edit-price" type="number" inputmode="numeric" min="0" value="${l.price ?? ''}" placeholder="0"></div>
+      <div class="field"><label>מקדמה ששולמה (₪)</label><input id="edit-deposit" type="number" inputmode="numeric" min="0" value="${l.deposit ?? ''}" placeholder="0"></div>
+    </div>
+    <div class="balance-line" id="balanceLine"></div>
+
     <div class="field"><label>הערות של איה</label><textarea id="edit-note" placeholder="כל מידע נוסף...">${esc(l.note)}</textarea></div>
 
     <div class="section-label">פרטים</div>
@@ -1685,6 +1715,19 @@ function openDrawer(id){
   $('scrim').classList.add('open');
   initConversation(l.phone);
   if($('calBtn')) $('calBtn').onclick = () => addToCalendar(l.id);
+
+  // יתרה לתשלום — מתעדכן חי בזמן ההקלדה
+  const updateBalance = () => {
+    const bl = $('balanceLine'); if(!bl) return;
+    const p = $('edit-price').value;
+    if(p==='' || isNaN(p)){ bl.classList.remove('show'); bl.innerHTML=''; return; }
+    const bal = Number(p) - Number($('edit-deposit').value || 0);
+    bl.classList.add('show');
+    bl.innerHTML = `יתרה לתשלום ביום האירוע<b>₪${bal.toLocaleString('he-IL')}</b>`;
+  };
+  $('edit-price').addEventListener('input', updateBalance);
+  $('edit-deposit').addEventListener('input', updateBalance);
+  updateBalance();
 }
 function closeDrawer(){
   $('drawer').classList.remove('open');
@@ -1707,6 +1750,9 @@ $('drawerSave').addEventListener('click', async () => {
     event_date:    $('edit-event').value.trim() || null,
     followup_date: $('edit-followup').value || null,
     service:       $('edit-service').value.trim() || null,
+    location:      $('edit-location').value.trim() || null,
+    price:         $('edit-price').value !== '' ? Number($('edit-price').value) : null,
+    deposit:       $('edit-deposit').value !== '' ? Number($('edit-deposit').value) : null,
     status:        $('edit-status').value,
     note:          $('edit-note').value.trim(),
   };
@@ -1743,6 +1789,9 @@ $('addSave').addEventListener('click', async () => {
     phone:         $('add-phone').value.trim() || null,
     event_date:    $('add-event').value.trim() || null,
     service:       $('add-service').value.trim() || null,
+    location:      $('add-location').value.trim() || null,
+    price:         $('add-price').value !== '' ? Number($('add-price').value) : null,
+    deposit:       $('add-deposit').value !== '' ? Number($('add-deposit').value) : null,
     note:          $('add-note').value.trim(),
     status:        $('add-status').value,
     followup_date: $('add-followup').value || null,
@@ -1751,7 +1800,7 @@ $('addSave').addEventListener('click', async () => {
   try {
     await dbInsertLead(lead);
     await loadLeads(); render();
-    ['add-name','add-phone','add-event','add-service','add-note','add-followup'].forEach(i => $(i).value='');
+    ['add-name','add-phone','add-event','add-service','add-note','add-followup','add-location','add-price','add-deposit'].forEach(i => $(i).value='');
     $('add-status').value = 'new';
     $('add-source').value = MANUAL_SOURCES[0];
     closeModal(); toast('ליד חדש נוסף');
@@ -2161,32 +2210,41 @@ async function addToCalendar(leadId){
 async function insertGoogleEvent(l, start){
   const end = new Date(start.getTime() + 2*3600*1000);   // שעתיים
   const svc = (l.service||'').trim();
+  const money = v => (v==null || v==='' || isNaN(v)) ? '—' : '₪' + Number(v).toLocaleString('he-IL');
+  const bal = balanceOf(l);
   const ev = {
     id: calEventId(l.id),
     summary: 'איה 💄 ' + (l.name||'לקוחה') + (svc ? ' · ' + svc : ''),
+    location: l.location || undefined,
     description: [
       'לקוחה: ' + (l.name||'—'),
       'טלפון: ' + (l.phone||'—'),
       'שירות: ' + (svc||'—'),
       'תאריך אירוע: ' + (l.event && l.event!=='—' ? l.event : '—'),
-      'מקור: ' + (l.source||'—'),
+      'מקום: ' + (l.location||'—'),
       '',
+      'מחיר שנסגר: ' + money(l.price),
+      'מקדמה ששולמה: ' + money(l.deposit),
+      'יתרה לתשלום: ' + (bal==null ? '—' : money(bal)),
+      '',
+      'מקור: ' + (l.source||'—'),
       'נקבע ממערכת הלידים 🌸'
     ].join('\n'),
     start: { dateTime: toLocalISO(start), timeZone: 'Asia/Jerusalem' },
     end:   { dateTime: toLocalISO(end),   timeZone: 'Asia/Jerusalem' },
   };
-  let res;
+  const base = 'https://www.googleapis.com/calendar/v3/calendars/primary/events';
+  const headers = { 'Authorization': 'Bearer ' + googleToken, 'Content-Type': 'application/json' };
   toast('מוסיף ליומן…');
+  let res;
   try {
-    res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + googleToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify(ev),
-    });
+    res = await fetch(base, { method: 'POST', headers, body: JSON.stringify(ev) });
+    if(res.status === 409){   // כבר קיים → מעדכנים אותו בפרטים העדכניים (בלי ליצור כפילות)
+      res = await fetch(base + '/' + ev.id, { method: 'PATCH', headers, body: JSON.stringify(ev) });
+      if(res.ok){ toast('האירוע עודכן ביומן ✓ 📅'); return; }
+    }
   } catch(e){ toast('שגיאת רשת בהוספה ליומן'); return; }
 
-  if(res.status === 409){ toast('האירוע כבר קיים ביומן ✓'); return; }         // כפילות — לא מוסיפים שוב
   if(res.status === 401 || res.status === 403){ googleToken = null; localStorage.removeItem('aya-gtoken'); connectGoogleThen(l.id); return; }  // פג תוקף → מתחברים מחדש
   if(!res.ok){ console.error('calendar error', await res.text().catch(()=>'')); toast('שגיאה בהוספה ליומן'); return; }
   toast('נוסף ליומן גוגל בהצלחה 📅');
