@@ -927,6 +927,14 @@
   .convo-body.open{ max-height:420px; margin-top:10px; overflow-y:auto; }
   .convo-loading{ text-align:center; color:var(--ink-faint); font-size:12px; padding:20px; }
 
+  /* מסך שיחה חי בכרטיס הבדיקה */
+  .test-thread{ margin-top:14px; }
+  .test-thread:empty{ margin-top:0; }
+  .test-thread .tt-head{ display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:700; letter-spacing:.3px; color:var(--ink-soft); margin-bottom:8px; }
+  .test-thread .tt-live{ display:inline-flex; align-items:center; gap:5px; color:var(--wa); font-weight:600; }
+  .test-thread .wa-preview{ max-height:300px; overflow-y:auto; }
+  .test-thread .tt-empty{ text-align:center; color:var(--ink-faint); font-size:12px; padding:18px 8px; line-height:1.7; }
+
   /* =====================================================================
      SKELETON LOADERS
   ===================================================================== */
@@ -1223,6 +1231,7 @@
             שליחת פופ-אפ לבדיקה
           </button>
           <p class="card-desc" id="testHint" style="margin-top:10px; margin-bottom:0"></p>
+          <div class="test-thread" id="testThread"></div>
         </div>
       </div>
     </section>
@@ -1417,7 +1426,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
     if(view === 'overview') renderOverview();
     if(view === 'today') renderTodayView();
     if(view === 'flow') renderFlow();
-    if(view === 'settings'){ renderKeywords(); renderQuestions(); }
+    if(view === 'settings'){ renderKeywords(); renderQuestions(); loadTestThread(true); }
   });
 });
 document.querySelectorAll('.menu-toggle').forEach(b => b.addEventListener('click', () => $('sidebar').classList.toggle('open')));
@@ -1887,13 +1896,36 @@ $('testSendBtn').addEventListener('click', async () => {
   try {
     const { error } = await sb.from('commands').insert({ type:'test_popup', phone });
     if(error) throw error;
-    $('testHint').innerHTML = '✅ השיחה התחילה! פתחי וואטסאפ במספר הזה, עני על השאלה שהגיעה — וההמשך יתגלגל כמו אצל לקוחה אמיתית.';
+    $('testHint').innerHTML = '✅ השיחה התחילה! עני על השאלה שהגיעה בוואטסאפ — וההמשך יתגלגל כאן למטה בזמן אמת.';
     toast('השיחה התחילה 📲');
+    loadTestThread(true);
   } catch(e){
     $('testHint').textContent = '';
     toast('שגיאה: ' + (e.message||e));
   } finally { btn.disabled = false; btn.innerHTML = orig; }
 });
+
+/* ── מסך שיחת בדיקה חי: מציג בזמן אמת מה נשלח ומה מתקבל למספר הבדיקה ── */
+let _testThreadKey = '';
+async function loadTestThread(force){
+  const wrap = $('testThread'); if(!wrap) return;
+  const phone = ($('testPhone').value || '').trim();
+  if(!phone){ wrap.innerHTML = ''; _testThreadKey = ''; return; }
+  const msgs = await loadConversation(phone);
+  const key = phone + '|' + msgs.length + '|' + (msgs.length ? msgs[msgs.length-1].body : '');
+  if(!force && key === _testThreadKey) return;    // לא השתנה — לא מרנדרים (מונע ריצוד)
+  _testThreadKey = key;
+  const head = '<div class="tt-head"><span>שיחת הבדיקה החיה</span><span class="tt-live"><span class="rt-dot"></span>מתעדכן</span></div>';
+  wrap.innerHTML = head + (msgs.length
+    ? renderConversation(msgs)
+    : '<div class="tt-empty">אין עדיין הודעות למספר הזה.<br>שלחי פופ-אף, ותראי כאן את השיחה מתגלגלת בזמן אמת.</div>');
+  const pv = wrap.querySelector('.wa-preview'); if(pv) pv.scrollTop = pv.scrollHeight;
+}
+$('testPhone').addEventListener('input', () => loadTestThread(true));
+// רענון אוטומטי כל 2.5 שניות כשנמצאים במסך ההגדרות עם מספר בדיקה
+setInterval(() => {
+  if($('view-settings').classList.contains('active') && ($('testPhone').value || '').trim()) loadTestThread();
+}, 2500);
 
 /* =========================================================
    FLOW VIEW

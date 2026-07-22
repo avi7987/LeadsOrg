@@ -39,7 +39,7 @@ client.on('qr', async (qr) => {
 
 client.on('authenticated', () => console.log('🔐 אומת בהצלחה'));
 
-client.on('ready', () => {
+client.on('ready', async () => {
   state = 'ready';
   try { if (fs.existsSync(QR_FILE)) fs.unlinkSync(QR_FILE); } catch {}
   const dry = process.env.DRY_RUN !== 'false';
@@ -108,14 +108,26 @@ client.on('disconnected', (reason) => {
 });
 
 // ── כל הודעה נכנסת עוברת ל"מוח" ──
-client.on('message', async (msg) => {
+// מאזינים גם ל-message וגם ל-message_create (בגרסאות מסוימות message לא נורה בעקביות),
+// עם מניעת עיבוד כפול לפי מזהה ההודעה.
+const _seenMsgs = new Set();
+async function onIncoming(msg, via) {
   try {
     if (msg.fromMe) return;
+    const id = msg.id && msg.id._serialized;
+    console.log(`📨 [${via}] מ-${msg.from}: ${JSON.stringify(msg.body || '')}`);
+    if (id) {
+      if (_seenMsgs.has(id)) return;         // כבר טופל דרך האירוע האחר
+      _seenMsgs.add(id);
+      if (_seenMsgs.size > 800) _seenMsgs.clear();
+    }
     await handleIncoming({ client, msg });
   } catch (err) {
     console.error('שגיאה בטיפול בהודעה:', err);
   }
-});
+}
+client.on('message',        (msg) => onIncoming(msg, 'message'));
+client.on('message_create', (msg) => onIncoming(msg, 'message_create'));
 
 // ── עמוד קישור מקומי (QR חי) ──
 http.createServer((req, res) => {

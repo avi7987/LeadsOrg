@@ -9,6 +9,21 @@ const waId = phone => `${phone}@c.us`;                 // המרה למזהה צ
 const norm = s => (s || '').toString().toLowerCase().trim();
 const contains = (text, needle) => norm(text).includes(norm(needle));
 
+// תרגום כתובת @lid (מזהה הפרטיות החדש של וואטסאפ) למספר הטלפון האמיתי —
+// דרך אותו מודול פנימי שהספרייה עצמה משתמשת בו (WAWebApiContact.getPhoneNumber)
+async function lidToPhone(client, lidSerialized) {
+  try {
+    const pn = await client.pupPage.evaluate((lid) => {
+      try {
+        const wid = window.require('WAWebWidFactory').createWid(lid);
+        const pnWid = window.require('WAWebApiContact').getPhoneNumber(wid);
+        return (pnWid && pnWid._serialized) ? pnWid._serialized : null;
+      } catch (e) { return null; }
+    }, lidSerialized);
+    return pn ? pn.replace(/@.*/, '').replace(/\D/g, '') : '';
+  } catch (e) { return ''; }
+}
+
 /**
  * מטפל בהודעה נכנסת אחת.
  * @param {object} p
@@ -16,12 +31,28 @@ const contains = (text, needle) => norm(text).includes(norm(needle));
  * @param {import('whatsapp-web.js').Message} p.msg
  */
 export async function handleIncoming({ client, msg }) {
-  const chat = await msg.getChat();
-  if (chat.isGroup) return;                             // מתעלמים מקבוצות
+  const from = msg.from || '';
+  if (from.endsWith('@g.us')) return;                   // מתעלמים מקבוצות
 
-  const contact = await msg.getContact();
-  const phone = contact.number;                         // למשל 972501234567
+  // מזהה הטלפון — כולל טיפול בכתובות @lid החדשות של וואטסאפ (מזהה פרטיות שאינו המספר)
+  let phone = '';
+  let contactObj = null;
+  if (from.endsWith('@c.us')) {
+    phone = from.replace(/@c\.us$/, '').replace(/\D/g, '');       // כתובת קלאסית → המספר ישירות
+  } else if (from.endsWith('@lid')) {
+    phone = await lidToPhone(client, from);                        // תרגום LID → מספר טלפון אמיתי
+  }
+  if (!phone) {                                                    // גיבוי אחרון
+    try {
+      contactObj = await msg.getContact();
+      const cand = contactObj && contactObj.id && contactObj.id.server === 'c.us' && contactObj.id.user;
+      if (cand) phone = String(cand).replace(/\D/g, '');
+    } catch (e) { /* ממשיכים */ }
+  }
+  if (!phone) phone = from.replace(/@.*/, '').replace(/\D/g, '');
   const body  = (msg.body || '').trim();
+  console.log(`   🔎 from=${from} → phone=${phone}`);
+  if (!phone) return;
 
   await db.logMessage(phone, 'in', body);
 
@@ -31,9 +62,18 @@ export async function handleIncoming({ client, msg }) {
   const session = await db.getPopupSession(phone);
   if (session) return handlePopupAnswer({ client, phone, body, session, cfg });
 
+  // פרטי איש הקשר — בעטיפת try, כי הספרייה נוטה להיכשל כאן מדי פעם
+  let pushname = (msg._data && msg._data.notifyName) || '';
+  let isMyContact = false;
+  try {
+    const contact = contactObj || await msg.getContact();
+    pushname = pushname || contact.pushname || contact.name || '';
+    isMyContact = !!contact.isMyContact;
+  } catch (e) { /* ממשיכים עם ברירות מחדל */ }
+
   // ── 2. מספר שמור באנשי הקשר → מתעלמים לחלוטין (משפחה/חברים) ──
-  if (contact.isMyContact) {
-    await ensureContact(phone, contact.pushname, true);
+  if (isMyContact) {
+    await ensureContact(phone, pushname, true);
     await db.setContactState(phone, 'ignored');
     return;
   }
@@ -42,13 +82,13 @@ export async function handleIncoming({ client, msg }) {
   if (cfg.adPrompt && contains(body, cfg.adPrompt)) {
     const lead = await db.createLead({
       source: 'פרסום',
-      name: contact.pushname || '',
+      name: pushname || '',
       phone,
       wa_chat_id: waId(phone),
       note: 'הגיע מפרסום ממומן',
       status: 'new',
     });
-    await ensureContact(phone, contact.pushname, false);
+    await ensureContact(phone, pushname, false);
     await db.setContactState(phone, 'converted');
     console.log(`📣 ליד מפרסום ממומן: ${phone} (#${lead.id})`);
     return;
@@ -56,7 +96,7 @@ export async function handleIncoming({ client, msg }) {
 
   // ── 4. סינון: רק שיחה ראשונה, עד N הודעות, בתוך חלון של שעה ──
   let c = await db.getContact(phone);
-  if (!c) c = await db.createContact(phone, contact.pushname, false);
+  if (!c) c = await db.createContact(phone, pushname, false);
 
   // כבר טופל (הפך לליד / נסגר / מספר שמור) → לא "מציקים" שוב
   if (c.state !== 'screening') return;
@@ -79,7 +119,7 @@ export async function handleIncoming({ client, msg }) {
     // נמצאה מילת מפתח → נוצר ליד + מתחילים פופ-אפ
     const lead = await db.createLead({
       source: 'הודעת פופ-אפ',
-      name: contact.pushname || '',
+      name: pushname || '',
       phone,
       wa_chat_id: waId(phone),
       note: `זוהתה מילת מפתח: "${hit}"`,
