@@ -126,7 +126,8 @@ async function onIncoming(msg, via) {
     console.error('שגיאה בטיפול בהודעה:', err);
   }
 }
-client.on('message',        (msg) => onIncoming(msg, 'message'));
+// מאזין יחיד: message_create נורה על כל ההודעות (כולל נכנסות), עם סינון fromMe.
+// (שימוש בשני אירועים גרם לעיבוד כפול — כל הודעה נשלחה פעמיים.)
 client.on('message_create', (msg) => onIncoming(msg, 'message_create'));
 
 // ── עמוד קישור מקומי (QR חי) ──

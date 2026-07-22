@@ -3,7 +3,7 @@
 //  מקבל הודעה נכנסת ומחליט: להתעלם / לבדוק / ליצור ליד / לשלוח פופ-אפ.
 // =====================================================================
 import * as db from './db.js';
-import { fill, cleanName, classifyService, normalizeDate } from './extract.js';
+import { fill, cleanName, classifyService, normalizeDate, detectBride } from './extract.js';
 
 const waId = phone => `${phone}@c.us`;                 // המרה למזהה צ'אט של whatsapp-web.js
 const norm = s => (s || '').toString().toLowerCase().trim();
@@ -87,6 +87,7 @@ export async function handleIncoming({ client, msg }) {
       wa_chat_id: waId(phone),
       note: 'הגיע מפרסום ממומן',
       status: 'new',
+      is_bride: detectBride(body),
     });
     await ensureContact(phone, pushname, false);
     await db.setContactState(phone, 'converted');
@@ -124,6 +125,7 @@ export async function handleIncoming({ client, msg }) {
       wa_chat_id: waId(phone),
       note: `זוהתה מילת מפתח: "${hit}"`,
       status: 'new',
+      is_bride: detectBride(body + ' ' + hit),
     });
     await db.setContactState(phone, 'converted');
     console.log(`✅ ליד חדש (מילת מפתח "${hit}"): ${phone} (#${lead.id})`);
@@ -172,10 +174,14 @@ async function handlePopupAnswer({ client, phone, body, session, cfg }) {
     if (svc.raw && svc.raw !== svc.label) note += ` · במילותיה: "${svc.raw}"`;
     if (extras.length) note += ` · ${extras.join(' · ')}`;
 
+    // זיהוי כלה — מכלל התשובות והשירות (מטרת-על)
+    const isBride = detectBride([svc.raw, answers.service, answers.event_date, answers.name, note].join(' ')) || svc.label === 'כלה';
+
     await db.updateLead(session.lead_id, {
       name:       name || undefined,
       event_date: eventDate || undefined,
       service:    svc.label || undefined,
+      is_bride:   isBride ? true : undefined,
       note,
     });
     await db.deletePopupSession(phone);

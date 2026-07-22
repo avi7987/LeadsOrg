@@ -41,6 +41,7 @@ create table if not exists leads (
   location      text,                            -- מקום האירוע
   price         numeric,                         -- המחיר שנסגר עם הלקוחה (₪)
   deposit       numeric,                         -- מקדמה ששולמה (₪) — יורדת מהסכום הסופי
+  is_bride      boolean     default false,       -- כלה — מטרת-על (זיהוי אוטומטי + סימון ידני)
   note          text        default '',
   status        text        default 'new'
                 check (status in ('new','noanswer','followup','closed','lost')),

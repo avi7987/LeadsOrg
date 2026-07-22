@@ -19,6 +19,11 @@ export function cleanName(s) {
   return t.split(/\s+/).slice(0, 3).join(' ');
 }
 
+// זיהוי כלה — מטרת-על. בודק בכל טקסט זמין (הודעה, תשובות, שירות)
+export function detectBride(text) {
+  return /כלה|כלות|מתחתנת|החתונה|חתונתי|כלולה|כלולות|נישואי|bride/i.test(text || '');
+}
+
 // סיווג סוג השירות לרשומה מסודרת (שומר גם את הניסוח המקורי)
 export function classifyService(s) {
   const raw = (s || '').trim();

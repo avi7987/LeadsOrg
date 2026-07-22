@@ -332,6 +332,8 @@
     display:flex; align-items:center; justify-content:center;
     font-size:12px; font-weight:700; flex-shrink:0;
   }
+  .name-cell .navatar.bride{ background:linear-gradient(150deg,#E8C56C,#C6A05E); color:#5b451a; box-shadow:0 0 0 2px var(--gold-soft); }
+  .bride-badge{ font-size:13px; line-height:1; flex-shrink:0; filter:drop-shadow(0 1px 1px rgba(0,0,0,.15)); }
   .muted{ color:var(--ink-soft); font-variant-numeric: tabular-nums; font-weight:300; }
 
   .source-tag{
@@ -499,6 +501,41 @@
   .balance-line.show{ display:flex; }
   .balance-line b{ font-size:15px; font-family:'Frank Ruhl Libre',serif; }
   :root[data-theme="dark"] .balance-line{ color:#93CCA4; }
+
+  /* מתג "לקוחה כלה" */
+  .bride-row{ display:flex; align-items:center; gap:12px; padding:11px 14px; margin-bottom:15px; border-radius:14px; cursor:pointer; user-select:none; background:linear-gradient(100deg, var(--gold-soft), var(--panel)); border:1px solid var(--line); transition:border-color .15s; }
+  .bride-row:hover{ border-color:var(--gold); }
+  .bride-row .br-label{ display:flex; align-items:center; gap:11px; flex:1; min-width:0; }
+  .bride-row .br-crown{ font-size:20px; filter:grayscale(.5) opacity(.6); transition:filter .2s, transform .2s; }
+  .bride-row .br-label b{ font-size:13.5px; color:var(--ink); display:block; }
+  .bride-row .br-label small{ font-size:11px; color:var(--ink-soft); }
+  .switch-input{ position:absolute; opacity:0; width:0; height:0; }
+  .switch{ width:42px; height:24px; border-radius:999px; background:var(--line); position:relative; flex-shrink:0; transition:background .2s; }
+  .switch::after{ content:''; position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .2s; }
+  .switch-input:checked + .switch{ background:var(--gold-deep); }
+  .switch-input:checked + .switch::after{ transform:translateX(-18px); }
+  .bride-row:has(.switch-input:checked) .br-crown{ filter:none; transform:scale(1.12); }
+  .dh-avatar.bride{ background:linear-gradient(150deg,#E8C56C,#C6A05E) !important; color:#5b451a !important; }
+
+  /* כפתור סינון כלות בסרגל */
+  .bride-filter-btn{ display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--panel); color:var(--gold-deep); border-radius:999px; padding:11px 16px; font-size:13.5px; font-weight:600; cursor:pointer; box-shadow:var(--shadow-sm); font-family:inherit; transition:background .15s, border-color .15s; }
+  .bride-filter-btn:hover{ background:var(--gold-soft); }
+  .bride-filter-btn.active{ background:linear-gradient(150deg,#E8C56C,#C6A05E); color:#5b451a; border-color:transparent; box-shadow:0 8px 18px -8px rgba(198,160,94,.6); }
+
+  /* כרטיס עולם הכלות במסך הסקירה */
+  .ov-bride{ background:linear-gradient(160deg, var(--gold-soft), var(--panel)); border-color:var(--gold); }
+  .bride-stats{ display:flex; align-items:center; gap:16px; }
+  .bride-stats .bs-main{ text-align:center; flex-shrink:0; }
+  .bride-stats .bs-num{ font-family:'Frank Ruhl Libre',serif; font-size:40px; font-weight:600; color:var(--gold-deep); line-height:1; }
+  .bride-stats .bs-lbl{ font-size:11px; color:var(--ink-soft); margin-top:3px; }
+  .bride-stats .bs-grid{ flex:1; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center; }
+  .bride-stats .bs-grid > div{ background:var(--panel); border:1px solid var(--line-soft); border-radius:10px; padding:8px 4px; }
+  .bride-stats .bs-grid b{ display:block; font-size:16px; color:var(--ink); font-family:'Frank Ruhl Libre',serif; }
+  .bride-stats .bs-grid span{ font-size:10px; color:var(--ink-soft); }
+  .bs-rev{ margin-top:12px; font-size:12px; color:var(--ink-soft); text-align:center; background:var(--panel); border-radius:10px; padding:8px; }
+  .bs-rev b{ color:var(--gold-deep); font-family:'Frank Ruhl Libre',serif; font-size:14px; }
+  .bs-filter{ margin-top:12px; width:100%; border:none; background:transparent; color:var(--gold-deep); font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit; padding:7px; border-radius:8px; transition:background .12s; }
+  .bs-filter:hover{ background:var(--gold-soft); }
 
   .section-label{
     font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
@@ -1087,6 +1124,7 @@
         </div>
         <select class="filter-select" id="statusFilter"><option value="all">כל הסטטוסים</option></select>
         <select class="filter-select" id="sourceFilter"><option value="all">כל המקורות</option></select>
+        <button class="bride-filter-btn" id="brideFilterBtn"><span>👑</span> כלות</button>
         <div class="toolbar-push">
           <span class="hint-text">💡 גררי כותרת עמודה לשינוי הסדר</span>
           <span class="result-note" id="resultNote"></span>
@@ -1296,6 +1334,11 @@
         <div class="field"><label>סטטוס</label><select id="add-status"></select></div>
       </div>
       <div class="field"><label>מתי לחזור</label><input type="date" id="add-followup"></div>
+      <label class="bride-row">
+        <span class="br-label"><span class="br-crown">👑</span><span><b>לקוחה כלה</b><small>מטרת-על — תשומת לב מיוחדת</small></span></span>
+        <input type="checkbox" id="add-bride" class="switch-input">
+        <span class="switch" aria-hidden="true"></span>
+      </label>
       <div class="field"><label>מקום האירוע</label><input type="text" id="add-location" placeholder="אולם / כתובת / עיר"></div>
       <div class="field-row">
         <div class="field"><label>מחיר שנסגר (₪)</label><input type="number" id="add-price" min="0" placeholder="0"></div>
@@ -1364,6 +1407,7 @@ let columnOrder = (() => {
 })();
 function saveColumnOrder(){ localStorage.setItem('aya-col-order', JSON.stringify(columnOrder)); }
 let showOnlyTodayFollowups = false;
+let showOnlyBrides = false;
 let sortKey = null, sortDir = 1;   // 1 = עולה, -1 = יורד
 
 /* =========================================================
@@ -1388,12 +1432,24 @@ const fmtMoney = v => (v==null || v==='' || isNaN(v)) ? '' : '₪' + Number(v).t
 // יתרה לתשלום = מחיר פחות מקדמה (רק אם יש מחיר)
 const balanceOf = l => (l.price==null || l.price==='') ? null : Number(l.price) - Number(l.deposit||0);
 
+// טלפון בפורמט ישראלי: 972547754759 → 054-775-4759. לא-ישראלי → נשמר עם +
+function fmtPhone(raw){
+  if(!raw) return '—';
+  let d = ('' + raw).replace(/\D/g, '');
+  if(d.startsWith('972')) d = '0' + d.slice(3);
+  else if(!d.startsWith('0')) return '+' + d;            // מספר בינלאומי (לא ישראלי)
+  if(d.length === 10) return d.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');   // נייד 054-775-4759
+  if(d.length === 9)  return d.replace(/(\d{2})(\d{3})(\d{4})/, '$1-$2-$3');   // קווי 09-123-4567
+  return d;
+}
+
 // שורת DB → אובייקט שה-UI יודע להציג
 function mapLead(r){
   return {
     id: r.id, source: r.source||'ידני', name: r.name||'', phone: r.phone||'',
     event: r.event_date || '—', service: r.service||'', note: r.note||'',
     location: r.location||'', price: r.price ?? null, deposit: r.deposit ?? null,
+    is_bride: !!r.is_bride,
     status: r.status||'new',
     followup_date: r.followup_date || null,
     followup: fmtDate(r.followup_date),
@@ -1487,6 +1543,11 @@ function renderFollowupBanner(){
     </div>`;
 }
 $('followupBanner').addEventListener('click', () => { showOnlyTodayFollowups = !showOnlyTodayFollowups; render(); });
+$('brideFilterBtn').addEventListener('click', () => {
+  showOnlyBrides = !showOnlyBrides;
+  $('brideFilterBtn').classList.toggle('active', showOnlyBrides);
+  render();
+});
 
 /* =========================================================
    TABLE
@@ -1495,8 +1556,8 @@ function cellContent(l, key){
   const s = statusById(l.status);
   switch(key){
     case 'source':   return `<span class="source-tag ${sourceClass(l.source)}"><span class="sdot"></span>${esc(l.source)}</span>`;
-    case 'name':     return `<div class="np"><span class="navatar">${esc(initials(l.name))}</span>${esc(l.name)}</div>`;
-    case 'phone':    return esc(l.phone);
+    case 'name':     return `<div class="np"><span class="navatar${l.is_bride?' bride':''}">${esc(initials(l.name))}</span><span class="nm-text">${esc(l.name)}</span>${l.is_bride?'<span class="bride-badge" title="כלה">👑</span>':''}</div>`;
+    case 'phone':    return esc(fmtPhone(l.phone));
     case 'event':    return esc(l.event);
     case 'service':  return esc(l.service);
     case 'note':     return `<span class="note-cell" title="${esc(l.note)}">${esc(l.note) || '—'}</span>`;
@@ -1568,7 +1629,8 @@ function render(){
     const mst = statusVal==='all' || l.status===statusVal;
     const msrc = sourceVal==='all' || l.source===sourceVal;
     const mf = !showOnlyTodayFollowups || isTodayLead(l);
-    return ms && mst && msrc && mf;
+    const mb = !showOnlyBrides || l.is_bride;
+    return ms && mst && msrc && mf && mb;
   });
 
   renderHead();
@@ -1659,8 +1721,9 @@ function openDrawer(id){
   document.querySelectorAll('#tableBody tr').forEach(tr => tr.classList.toggle('row-open', tr.dataset.id===String(id)));
 
   $('drawerAvatar').textContent = initials(l.name);
-  $('drawerName').textContent = l.name || 'ללא שם';
-  $('drawerPhone').textContent = l.phone || '—';
+  $('drawerAvatar').classList.toggle('bride', l.is_bride);
+  $('drawerName').innerHTML = esc(l.name || 'ללא שם') + (l.is_bride ? ' <span class="bride-badge" style="font-size:18px">👑</span>' : '');
+  $('drawerPhone').textContent = fmtPhone(l.phone);
 
   const digits = (l.phone||'').replace(/\D/g,'');
   const waNum = digits ? (digits.startsWith('972') ? digits : '972'+digits.replace(/^0/,'')) : '';
@@ -1669,7 +1732,7 @@ function openDrawer(id){
   $('drawerBody').innerHTML = `
     <div class="field"><label>שם הלקוחה</label><input id="edit-name" type="text" value="${esc(l.name)}"></div>
     <div class="field-row">
-      <div class="field"><label>טלפון</label><input id="edit-phone" type="text" value="${esc(l.phone)}"></div>
+      <div class="field"><label>טלפון</label><input id="edit-phone" type="text" value="${esc(l.phone ? fmtPhone(l.phone) : '')}"></div>
       <div class="field"><label>מקור</label>
         <select id="edit-source">${SOURCES.map(s=>`<option ${s===l.source?'selected':''}>${s}</option>`).join('')}</select>
       </div>
@@ -1682,6 +1745,12 @@ function openDrawer(id){
     <div class="field"><label>סטטוס</label>
       <select id="edit-status">${STATUSES.map(s=>`<option value="${s.id}" ${s.id===l.status?'selected':''}>${s.label}</option>`).join('')}</select>
     </div>
+
+    <label class="bride-row">
+      <span class="br-label"><span class="br-crown">👑</span><span><b>לקוחה כלה</b><small>מטרת-על — תשומת לב מיוחדת</small></span></span>
+      <input type="checkbox" id="edit-bride" class="switch-input" ${l.is_bride?'checked':''}>
+      <span class="switch" aria-hidden="true"></span>
+    </label>
 
     <div class="section-label">סגירה ותשלום</div>
     <div class="field"><label>מקום האירוע</label><input id="edit-location" type="text" value="${esc(l.location)}" placeholder="אולם / כתובת / עיר"></div>
@@ -1762,6 +1831,7 @@ $('drawerSave').addEventListener('click', async () => {
     location:      $('edit-location').value.trim() || null,
     price:         $('edit-price').value !== '' ? Number($('edit-price').value) : null,
     deposit:       $('edit-deposit').value !== '' ? Number($('edit-deposit').value) : null,
+    is_bride:      $('edit-bride').checked,
     status:        $('edit-status').value,
     note:          $('edit-note').value.trim(),
   };
@@ -1801,6 +1871,7 @@ $('addSave').addEventListener('click', async () => {
     location:      $('add-location').value.trim() || null,
     price:         $('add-price').value !== '' ? Number($('add-price').value) : null,
     deposit:       $('add-deposit').value !== '' ? Number($('add-deposit').value) : null,
+    is_bride:      $('add-bride').checked,
     note:          $('add-note').value.trim(),
     status:        $('add-status').value,
     followup_date: $('add-followup').value || null,
@@ -1812,6 +1883,7 @@ $('addSave').addEventListener('click', async () => {
     ['add-name','add-phone','add-event','add-service','add-note','add-followup','add-location','add-price','add-deposit'].forEach(i => $(i).value='');
     $('add-status').value = 'new';
     $('add-source').value = MANUAL_SOURCES[0];
+    $('add-bride').checked = false;
     closeModal(); toast('ליד חדש נוסף');
   } catch(err){ console.error(err); toast('שגיאה בהוספת הליד: ' + (err.message||err)); }
   finally { btn.disabled = false; btn.textContent = orig; }
@@ -2142,8 +2214,35 @@ function renderOverview(){
     }).join('')}</div>` : `<div class="ag-empty">אין חזרות מתוכננות ✨</div>`;
   const agenda = `<div class="ov-card span12"><p class="ov-ctitle">🗓️ החזרות הקרובות</p><p class="ov-csub">לקוחות שקבעת לחזור אליהן — לפי תאריך</p>${agendaHtml}</div>`;
 
-  grid.innerHTML = tiles + overTime + sources + funnel + services + agenda;
+  // ---- bride world (מטרת-על) ----
+  const brides = leads.filter(l => l.is_bride);
+  const bridesClosed = brides.filter(l => l.status === 'closed');
+  const brideRate = brides.length ? Math.round(bridesClosed.length / brides.length * 100) : 0;
+  const bridesWeek = brides.filter(l => inRange(l, nowMs-wk, nowMs+1)).length;
+  const brideRevenue = bridesClosed.reduce((s,l) => s + (Number(l.price) || 0), 0);
+  const bride = `<div class="ov-card span4 ov-bride">
+    <p class="ov-ctitle">👑 עולם הכלות</p><p class="ov-csub">המטרה המרכזית — במבט נפרד</p>
+    <div class="bride-stats">
+      <div class="bs-main"><div class="bs-num">${brides.length}</div><div class="bs-lbl">כלות סה״כ</div></div>
+      <div class="bs-grid">
+        <div><b>${bridesClosed.length}</b><span>נסגרו</span></div>
+        <div><b>${brideRate}%</b><span>אחוז סגירה</span></div>
+        <div><b>${bridesWeek}</b><span>נכנסו השבוע</span></div>
+      </div>
+    </div>
+    ${brideRevenue ? `<div class="bs-rev">הכנסות מכלות שנסגרו <b>₪${brideRevenue.toLocaleString('he-IL')}</b></div>` : ''}
+    <button class="bs-filter" id="ovBrideFilter">הצגת כל הכלות בלוח ←</button>
+  </div>`;
+
+  grid.innerHTML = tiles + overTime + sources + funnel + services + bride + agenda;
   grid.querySelectorAll('.ag-row').forEach(r => r.addEventListener('click', () => openDrawer(r.dataset.id)));
+  const bf = $('ovBrideFilter');
+  if(bf) bf.addEventListener('click', () => {
+    showOnlyBrides = true;
+    $('brideFilterBtn').classList.add('active');
+    document.querySelector('[data-view="leads"]').click();
+    render();
+  });
 }
 
 /* =========================================================
@@ -2246,9 +2345,10 @@ async function insertGoogleEvent(l, start){
   const bal = balanceOf(l);
   const ev = {
     id: calEventId(l.id),
-    summary: 'איה 💄 ' + (l.name||'לקוחה') + (svc ? ' · ' + svc : ''),
+    summary: (l.is_bride ? '👑 ' : '') + 'איה 💄 ' + (l.name||'לקוחה') + (svc ? ' · ' + svc : ''),
     location: l.location || undefined,
     description: [
+      ...(l.is_bride ? ['👑 כלה — מטרת-על', ''] : []),
       'לקוחה: ' + (l.name||'—'),
       'טלפון: ' + (l.phone||'—'),
       'שירות: ' + (svc||'—'),
