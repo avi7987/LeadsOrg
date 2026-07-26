@@ -15,6 +15,7 @@ worker/node_modules/
 # לוגים / זמניים
 *.log
 _preview_leads.html
+_redesign-preview.html
 
 # מערכת הפעלה
 .DS_Store
