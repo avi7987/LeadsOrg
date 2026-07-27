@@ -51,6 +51,11 @@ export async function logMessage(phone, direction, body) {
   await supabase.from('messages').insert({ phone, direction, body: body || '' });
 }
 
+// מחיקת כל ההודעות של מספר (כשההתכתבות נסגרה בלי ליד — פרטיות ונפח)
+export async function deleteMessages(phone) {
+  await supabase.from('messages').delete().eq('phone', phone);
+}
+
 // ---------- leads ----------
 export async function createLead(lead) {
   const { data, error } = await supabase.from('leads').insert(lead).select().single();
@@ -106,6 +111,16 @@ export async function getConfig() {
     adPrompt:       s.ad_prompt || '',
     windowMinutes:  Number(s.window_minutes ?? 60),
     maxScreened:    Number(s.max_screened ?? 3),
+    // ── אוטומציות (נערכות מהדשבורד) ──
+    followupEnabled: s.followup_enabled !== false,
+    followupDays:    Number(s.followup_days ?? 2),
+    followupMessage: s.followup_message || 'היי {{name}} 💕 רק רציתי לבדוק אם חשבת על זה? אשמח לענות על כל שאלה ✨',
+    abandonEnabled:  s.abandon_enabled !== false,
+    abandonHours:    Number(s.abandon_hours ?? 6),
+    abandonMessage:  s.abandon_message || 'היי {{name}} 🌸 נשאר לי רק עוד פרט קטן כדי לשמור לך מקום — נשמח שתשלימי 💕',
+    abandonExpireHours: Number(s.abandon_expire_hours ?? 72),
+    eventReminderEnabled: s.event_reminder_enabled !== false,
+    eventReminderMessage: s.event_reminder_message || 'היי {{name}} 💕 מחר היום הגדול! מתרגשת לקראתך ✨ נתראה מחר',
   };
   _cacheAt = Date.now();
   return _cache;

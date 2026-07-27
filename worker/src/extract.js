@@ -25,6 +25,7 @@ export function detectBride(text) {
 }
 
 // סיווג סוג השירות לרשומה מסודרת (שומר גם את הניסוח המקורי)
+// matched=true רק אם באמת זוהה שירות (ולא סתם הועתק הטקסט) — משמש לדילוג על שאלות מיותרות
 export function classifyService(s) {
   const raw = (s || '').trim();
   const t = raw.toLowerCase();
@@ -32,12 +33,53 @@ export function classifyService(s) {
   const hair   = /שיער|תסרוק|תספורת|פן|בלונד|החלקה/.test(t);
   const both   = /שתיהן|שתיים|שניהם|גם.?וגם|הכל|חבילה מלאה|המלאה|שילוב|ביחד|שתיהם/.test(t);
   const bride  = /כלה|מתחתנת|חתונה/.test(t);
-  let label = raw;
+  let label = raw, matched = true;
   if (both || (makeup && hair)) label = 'איפור + תסרוקת';
   else if (makeup) label = 'איפור';
   else if (hair)   label = 'תסרוקת';
   else if (bride)  label = 'כלה';
-  return { label, raw };
+  else matched = false;
+  return { label, raw, matched };
+}
+
+// ---------- זיהוי נתונים מתוך הודעה חופשית (לדילוג על שאלות שאין בהן צורך) ----------
+
+// שם — רק כשהלקוחה מציגה את עצמה במפורש ("קוראים לי X" / "שמי X"), כדי לא לטעות
+export function extractNameExplicit(text) {
+  const m = (text || '').match(/(?:קוראים לי|שמי|השם שלי(?:\s+הוא)?)\s+([א-תa-zA-Z]{2,}(?:\s+[א-תa-zA-Z]{2,})?)/i);
+  return m ? cleanName(m[1]) : '';
+}
+
+// תאריך — רק אם יש ממש רמז לתאריך בטקסט (מספרי או שם חודש עברי)
+export function extractDateHint(text) {
+  const raw = (text || '').trim();
+  if (!raw) return '';
+  const numeric = /(\d{1,2})\s*[.\/\-]\s*(\d{1,2})(?:\s*[.\/\-]\s*(\d{2,4}))?/.test(raw);
+  const hebMonth = Object.keys(HE_MONTHS).some(m => raw.includes(m));
+  if (!numeric && !hebMonth) return '';
+  const out = normalizeDate(raw);
+  return out === raw && !numeric && !hebMonth ? '' : out;
+}
+
+// טקסט חופשי → תאריך אמיתי (Date). אם אין שנה — בוחר את המופע הבא בעתיד.
+export function parseEventDate(text) {
+  const raw = (text || '').trim();
+  if (!raw) return null;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const mk = (d, mo, y) => { const dt = new Date(y, mo - 1, d); return isNaN(dt.getTime()) ? null : dt; };
+  const future = (d, mo) => { let dt = mk(d, mo, today.getFullYear()); if (dt && dt < today) dt = mk(d, mo, today.getFullYear() + 1); return dt; };
+  const m = raw.match(/(\d{1,2})\s*[.\/\-]\s*(\d{1,2})(?:\s*[.\/\-]\s*(\d{2,4}))?/);
+  if (m) {
+    const d = +m[1], mo = +m[2]; let y = m[3] ? +m[3] : null; if (y && y < 100) y += 2000;
+    if (d >= 1 && d <= 31 && mo >= 1 && mo <= 12) return y ? mk(d, mo, y) : future(d, mo);
+  }
+  for (const [name, mo] of Object.entries(HE_MONTHS)) {
+    if (raw.includes(name)) {
+      const dm = raw.match(/(\d{1,2})/); const ym = raw.match(/(20\d{2})/);
+      return ym ? mk(dm ? +dm[1] : 1, mo, +ym[1]) : future(dm ? +dm[1] : 1, mo);
+    }
+  }
+  return null;
 }
 
 // נירמול תאריך לטקסט קריא (אם לא זוהה — שומר את המקור כפי שהוא)

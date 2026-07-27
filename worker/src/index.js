@@ -13,6 +13,7 @@ import QRCode from 'qrcode';
 import { handleIncoming } from './logic.js';
 import * as db from './db.js';
 import { fill } from './extract.js';
+import { startAutomations } from './automations.js';
 
 const QR_FILE = './qr.png';
 const PORT = process.env.PORT || 3000;   // הענן מקצה פורט דרך PORT
@@ -50,6 +51,7 @@ client.on('ready', async () => {
     ? '🧪 מצב בדיקה (DRY_RUN): מזהה ויוצר לידים, אך לא שולח הודעות אמת ללקוחות.'
     : '🚀 מצב חי: המערכת שולחת פופ-אפים אמיתיים ללקוחות!');
   startCommandPoller();
+  startAutomations(client);
 });
 
 // ── בדיקות מהדשבורד: שולף "פקודות בדיקה" מ-Supabase ושולח פופ-אפ אמיתי ──
