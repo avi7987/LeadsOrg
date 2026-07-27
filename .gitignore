@@ -23,3 +23,5 @@ Thumbs.db
 
 # הגדרות Claude מקומיות
 .claude/settings.local.json
+_prod-integrated.html
+_prod-mock.html

@@ -808,6 +808,66 @@
   .rpg:disabled{ opacity:.4; cursor:default; }
   @media (max-width:1050px){ .rkpis{ grid-template-columns:repeat(2,1fr); } }
 
+  /* ============ REDESIGN — Settings & Automations ============ */
+  /* מפת מסע הלקוחה */
+  .journey{ display:flex; align-items:stretch; gap:8px; background:var(--panel); border:1px solid var(--line-soft); border-radius:18px; padding:16px 18px; margin-bottom:20px; box-shadow:var(--shadow-sm); overflow-x:auto; }
+  .jstep{ flex:1; min-width:118px; text-align:center; padding:10px 8px; border-radius:13px; background:var(--bg-a); border:1px solid var(--line-soft); }
+  .jstep .jic{ font-size:19px; display:block; margin-bottom:5px; }
+  .jstep b{ display:block; font-size:13px; color:var(--ink); }
+  .jstep span.jd{ display:block; font-size:11.5px; color:var(--ink-soft); margin-top:2px; line-height:1.45; }
+  .jstep.auto{ background:linear-gradient(160deg,var(--rose-pale),var(--panel)); border-color:var(--rose); }
+  .jstep.off{ opacity:.45; }
+  .jarrow{ display:flex; align-items:center; color:var(--ink-faint); font-size:17px; flex-shrink:0; }
+
+  /* לשוניות שלבים */
+  .set-tabs{ display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .set-tabs button{ display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); background:var(--panel); color:var(--ink-soft); font:inherit; font-size:14px; font-weight:700; padding:11px 17px; border-radius:13px; cursor:pointer; box-shadow:var(--shadow-sm); transition:all .15s; }
+  .set-tabs button span{ width:21px; height:21px; border-radius:7px; background:var(--bg-a); color:var(--ink-faint); display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:800; }
+  .set-tabs button:hover{ color:var(--rose-deep); border-color:var(--rose); }
+  .set-tabs button.on{ background:linear-gradient(150deg,var(--rose),var(--rose-deep)); color:#fff; border-color:transparent; box-shadow:0 10px 22px -10px rgba(214,143,164,.7); }
+  .set-tabs button.on span{ background:rgba(255,255,255,.24); color:#fff; }
+  .set-panel{ display:none; animation:fade .25s ease; }
+  .set-panel.active{ display:block; }
+  .panel-intro{ font-size:13.5px; color:var(--ink-soft); margin:0 0 16px; }
+
+  /* כרטיס חוק אוטומציה */
+  .rule{ background:var(--panel); border:1px solid var(--line-soft); border-radius:var(--radius); box-shadow:var(--shadow-sm); margin-bottom:14px; overflow:hidden; transition:border-color .15s; }
+  .rule.on{ border-color:var(--rose); }
+  .rule-head{ display:flex; align-items:center; gap:13px; padding:16px 20px; }
+  .rule-ic{ width:42px; height:42px; border-radius:13px; background:var(--rose-pale); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+  .rule-t{ flex:1; min-width:0; }
+  .rule-t h3{ margin:0; font-size:16px; font-weight:800; color:var(--ink); }
+  .rule-when{ display:block; font-size:12.5px; color:var(--ink-soft); margin-top:2px; line-height:1.45; }
+  .sw-wrap{ display:flex; align-items:center; cursor:pointer; flex-shrink:0; }
+  .rule-body{ padding:0 20px 18px; border-top:1px solid var(--line-soft); padding-top:16px; }
+  .rule.off .rule-body{ opacity:.5; pointer-events:none; }
+  .rule-body .field{ margin-bottom:12px; }
+  .rule-body textarea{ min-height:64px; }
+
+  /* משתנים להוספה בהודעה */
+  .var-chips{ display:flex; gap:7px; flex-wrap:wrap; margin:-4px 0 14px; }
+  .var-chip{ border:1px dashed var(--line); background:var(--bg-a); color:var(--rose-deep); font:inherit; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:999px; cursor:pointer; }
+  .var-chip:hover{ background:var(--rose-pale); border-style:solid; border-color:var(--rose); }
+
+  /* הערות חכמות */
+  .smart-note{ background:var(--gold-soft); border-radius:12px; padding:11px 14px; font-size:12.5px; color:#7a5f1e; line-height:1.6; margin-bottom:14px; }
+  :root[data-theme="dark"] .smart-note{ color:#E7CB90; }
+
+  /* מיפוי שאלה→שדה */
+  .qmap{ margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
+  .qmap-t{ font-size:11px; font-weight:800; letter-spacing:.5px; color:var(--ink-faint); margin-bottom:8px; }
+  .qmap-row{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); padding:4px 0; }
+  .qmap-row b{ color:var(--ink); }
+  .qmap-badge{ font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--rose-pale); color:var(--rose-deep); }
+
+  /* הודעת המשך בכרטיס הליד */
+  .fu-box{ background:var(--bg-a); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:-4px 0 15px; }
+  .fu-head{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px; }
+  .fu-head .fu-badge{ margin-inline-start:auto; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--wa-soft); color:var(--wa); }
+  .fu-box textarea{ width:100%; min-height:56px; padding:10px 12px; border-radius:11px; border:1px solid var(--line); background:var(--panel); font:inherit; font-size:13px; color:var(--ink); outline:none; resize:vertical; line-height:1.5; }
+  .fu-box textarea:focus{ border-color:var(--rose); box-shadow:0 0 0 3px var(--rose-pale); }
+  .fu-hint{ font-size:11.5px; color:var(--ink-faint); margin-top:6px; }
+
   /* ---- Login ---- */
   .login-scrim{
     position:fixed; inset:0; z-index:300;
@@ -1271,23 +1331,34 @@
 
     <!-- ---------- SETTINGS VIEW ---------- -->
     <section class="view" id="view-settings">
-      <div class="page-head">
+      <div class="rhead">
         <div>
-          <span class="ph-eyebrow">אוטומציה</span>
-          <h1>הגדרות זיהוי</h1>
-          <p class="ph-sub">מילות המפתח, שאלות הפופ-אפ וזיהוי מקור הפרסום</p>
+          <h1>הגדרות ואוטומציות</h1>
+          <div class="rsub">כל מה שהמערכת עושה לבד — מסודר לפי שלבי מסע הלקוחה</div>
         </div>
       </div>
-      <div class="settings-grid">
+
+      <!-- מסע הלקוחה: מפה חזותית שמראה מה קורה ומתי -->
+      <div class="journey" id="journeyMap"></div>
+
+      <!-- ניווט בין שלבים -->
+      <div class="set-tabs" id="setTabs">
+        <button data-t="detect" class="on"><span>1</span> זיהוי לידים</button>
+        <button data-t="convo"><span>2</span> שיחת הפופ-אף</button>
+        <button data-t="auto"><span>3</span> אוטומציות המשך</button>
+        <button data-t="test"><span>🧪</span> בדיקה</button>
+      </div>
+
+      <!-- ===== שלב 1: זיהוי ===== -->
+      <div class="set-panel active" id="set-detect">
+        <div class="settings-grid">
         <!-- keywords -->
         <div class="card">
           <div class="card-head">
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg></div>
-            <div>
-              <h3>מילות מפתח</h3>
-            </div>
+            <div><h3>מילות מפתח</h3></div>
           </div>
-          <p class="card-desc">כשאחת מ-3 ההודעות הראשונות של לקוחה חדשה מכילה מילת מפתח — נשלח אליה אוטומטית פופ-אפ עם השאלות ונפתח ליד.</p>
+          <p class="card-desc">כשאחת מההודעות הראשונות של לקוחה חדשה מכילה מילת מפתח — נפתח ליד ונשלחת אליה שיחת הפופ-אף אוטומטית.</p>
           <div class="chips" id="keywordChips"></div>
           <div class="add-inline">
             <input type="text" id="keywordInput" placeholder="הוספת מילת מפתח...">
@@ -1295,31 +1366,13 @@
           </div>
         </div>
 
-        <!-- popup questions -->
-        <div class="card">
-          <div class="card-head">
-            <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div>
-              <h3>שאלות הפופ-אפ</h3>
-            </div>
-          </div>
-          <p class="card-desc">רצף השאלות שנשלח אוטומטית ללקוחה בוואטסאפ. התשובות נכנסות ישירות לכרטיס הליד.</p>
-          <div id="questionList"></div>
-          <div class="add-inline" style="margin-top:12px">
-            <input type="text" id="questionInput" placeholder="הוספת שאלה...">
-            <button id="questionAdd">הוספה</button>
-          </div>
-        </div>
-
         <!-- ad source detection -->
         <div class="card">
           <div class="card-head">
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
-            <div>
-              <h3>זיהוי פרסום ממומן</h3>
-            </div>
+            <div><h3>זיהוי פרסום ממומן</h3></div>
           </div>
-          <p class="card-desc">הודעת הפתיחה הקבועה שמגיעה מלחיצה על מודעה בפייסבוק/אינסטגרם. זיהוי ההודעה מתייג את הליד אוטומטית כ"פרסום" — בלי לשלוח פופ-אפ נוסף.</p>
+          <p class="card-desc">הודעת הפתיחה שמגיעה מלחיצה על מודעה בפייסבוק/אינסטגרם. זיהויה מתייג את הליד אוטומטית כ"פרסום" — בלי פופ-אף נוסף.</p>
           <div class="field">
             <label>טקסט הזיהוי של המודעה</label>
             <textarea id="adPromptText">היי! הגעתי דרך המודעה שלך על איפור ושיער לאירועים ✨</textarea>
@@ -1330,22 +1383,147 @@
           </button>
         </div>
 
-        <!-- test popup -->
+        <!-- screening rules -->
+        <div class="card">
+          <div class="card-head">
+            <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <div><h3>כללי הסינון</h3></div>
+          </div>
+          <p class="card-desc">כמה זמן ועד כמה הודעות המערכת "מקשיבה" ללקוחה חדשה לפני שהיא מפסיקה לחפש מילות מפתח.</p>
+          <div class="field-row">
+            <div class="field"><label>חלון זמן (דקות)</label><input type="number" id="setWindowMinutes" min="5" max="1440"></div>
+            <div class="field"><label>מקסימום הודעות</label><input type="number" id="setMaxScreened" min="1" max="10"></div>
+          </div>
+          <button class="btn btn-ghost btn-block" id="saveScreening">שמירת כללי הסינון</button>
+        </div>
+        </div>
+      </div>
+
+      <!-- ===== שלב 2: שיחת הפופ-אף ===== -->
+      <div class="set-panel" id="set-convo">
+        <div class="settings-grid">
+        <div class="card">
+          <div class="card-head">
+            <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div><h3>שאלות הפופ-אף</h3></div>
+          </div>
+          <p class="card-desc">רצף השאלות שנשלח ללקוחה — כל שאלה מגיעה רק אחרי שענתה על הקודמת. התשובות נכנסות ישירות לכרטיס הליד.</p>
+          <div class="smart-note">🎯 <b>חכם:</b> אם הלקוחה כבר מסרה פרט בהודעה שלה (למשל "אני כלה, מחפשת איפור ל-20.9") — המערכת מזהה זאת ו<b>מדלגת</b> על השאלה המיותרת.</div>
+          <div id="questionList"></div>
+          <div class="add-inline" style="margin-top:12px">
+            <input type="text" id="questionInput" placeholder="הוספת שאלה...">
+            <button id="questionAdd">הוספה</button>
+          </div>
+          <div class="qmap" id="qMap"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div><h3>הודעת הסיום</h3></div>
+          </div>
+          <p class="card-desc">נשלחת ללקוחה אחרי שהשלימה את כל השאלות.</p>
+          <div class="field">
+            <label>ניסוח ההודעה</label>
+            <textarea id="popupThanksText" data-setting="popup_thanks"></textarea>
+          </div>
+          <div class="var-chips" data-for="popupThanksText"></div>
+          <button class="btn btn-ghost btn-block save-setting" data-target="popupThanksText" data-key="popup_thanks">שמירת הודעת הסיום</button>
+        </div>
+        </div>
+      </div>
+
+      <!-- ===== שלב 3: אוטומציות המשך ===== -->
+      <div class="set-panel" id="set-auto">
+        <p class="panel-intro">שלוש אוטומציות שרצות לבד ודואגות שאף לקוחה לא תישכח. אפשר לכבות כל אחת בנפרד.</p>
+
+        <!-- rule: abandoned popup -->
+        <div class="rule" id="ruleAbandon">
+          <div class="rule-head">
+            <span class="rule-ic">🔔</span>
+            <div class="rule-t">
+              <h3>תזכורת ללקוחה שלא סיימה</h3>
+              <span class="rule-when">אם התחילה לענות ונעצרה באמצע — נשלחת תזכורת עדינה אחת</span>
+            </div>
+            <label class="sw-wrap"><input type="checkbox" id="abEnabled" class="switch-input"><span class="switch"></span></label>
+          </div>
+          <div class="rule-body">
+            <div class="field" style="max-width:220px">
+              <label>אחרי כמה שעות?</label>
+              <input type="number" id="abHours" min="1" max="72">
+            </div>
+            <div class="field">
+              <label>ניסוח ההודעה</label>
+              <textarea id="abMessage"></textarea>
+            </div>
+            <div class="var-chips" data-for="abMessage"></div>
+            <button class="btn btn-ghost" id="saveAbandon">שמירה</button>
+          </div>
+        </div>
+
+        <!-- rule: followup -->
+        <div class="rule" id="ruleFollowup">
+          <div class="rule-head">
+            <span class="rule-ic">📨</span>
+            <div class="rule-t">
+              <h3>הודעת המשך ללידים</h3>
+              <span class="rule-when">כל ליד חדש מקבל אוטומטית תאריך חזרה — וביום הזה נשלחת ההודעה</span>
+            </div>
+            <label class="sw-wrap"><input type="checkbox" id="fuEnabled" class="switch-input"><span class="switch"></span></label>
+          </div>
+          <div class="rule-body">
+            <div class="field" style="max-width:220px">
+              <label>בעוד כמה ימים מהכניסה?</label>
+              <input type="number" id="fuDays" min="1" max="30">
+            </div>
+            <div class="field">
+              <label>ניסוח ברירת מחדל</label>
+              <textarea id="fuMessage"></textarea>
+            </div>
+            <div class="var-chips" data-for="fuMessage"></div>
+            <div class="smart-note">💡 בכל ליד אפשר לשנות את ההודעה הזו אישית — בכרטיס הליד, ליד "מתי לחזור".</div>
+            <button class="btn btn-ghost" id="saveFollowup">שמירה</button>
+          </div>
+        </div>
+
+        <!-- rule: event reminder -->
+        <div class="rule" id="ruleEvent">
+          <div class="rule-head">
+            <span class="rule-ic">🗓️</span>
+            <div class="rule-t">
+              <h3>תזכורת יום לפני האירוע</h3>
+              <span class="rule-when">נשלחת ללקוחות בסטטוס "סגרה" — יום לפני תאריך האירוע שלהן</span>
+            </div>
+            <label class="sw-wrap"><input type="checkbox" id="evEnabled" class="switch-input"><span class="switch"></span></label>
+          </div>
+          <div class="rule-body">
+            <div class="field">
+              <label>ניסוח ההודעה</label>
+              <textarea id="evMessage"></textarea>
+            </div>
+            <div class="var-chips" data-for="evMessage"></div>
+            <button class="btn btn-ghost" id="saveEvent">שמירה</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== בדיקה ===== -->
+      <div class="set-panel" id="set-test">
+        <div class="settings-grid">
         <div class="card">
           <div class="card-head">
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></div>
-            <div>
-              <h3>בדיקת פופ-אפ חי</h3>
-            </div>
+            <div><h3>בדיקת פופ-אף חי</h3></div>
           </div>
-          <p class="card-desc">המערכת תתחיל איתך שיחה בוואטסאפ בדיוק כמו עם לקוחה חדשה — <b>כל שאלה תגיע רק אחרי שתעני על הקודמת</b>. הזיני מספר <b>שונה מהמספר המחובר</b>, ועני על ההודעות כמו לקוחה.</p>
+          <p class="card-desc">המערכת תתחיל איתך שיחה בוואטסאפ בדיוק כמו עם לקוחה חדשה — <b>כל שאלה תגיע רק אחרי שתעני על הקודמת</b>. הזיני מספר <b>שונה מהמספר המחובר</b>.</p>
           <div class="field"><label>מספר לבדיקה</label><input type="text" id="testPhone" placeholder="050-0000000"></div>
           <button class="btn btn-wa btn-block" id="testSendBtn">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg>
-            שליחת פופ-אפ לבדיקה
+            שליחת פופ-אף לבדיקה
           </button>
           <p class="card-desc" id="testHint" style="margin-top:10px; margin-bottom:0"></p>
           <div class="test-thread" id="testThread"></div>
+        </div>
         </div>
       </div>
     </section>
@@ -1508,6 +1686,17 @@ const fmtMoney = v => (v==null || v==='' || isNaN(v)) ? '' : '₪' + Number(v).t
 // יתרה לתשלום = מחיר פחות מקדמה (רק אם יש מחיר)
 const balanceOf = l => (l.price==null || l.price==='') ? null : Number(l.price) - Number(l.deposit||0);
 
+// נרמול לפורמט קנוני יחיד לשמירה ב-DB: 9725XXXXXXXX (זהה ל-Worker!)
+// חובה בכל כתיבה — אחרת ה-Worker לא מזהה את הלקוחה ושיחות/פופ-אפים נשברים.
+function normPhone(p){
+  let d = (p||'').toString().replace(/\D/g,'');
+  if(!d) return null;
+  if(d.startsWith('972')) return d;
+  if(d.startsWith('0')) return '972'+d.slice(1);
+  if(d.length===9 && d.startsWith('5')) return '972'+d;
+  return d;
+}
+
 // טלפון בפורמט ישראלי: 972547754759 → 054-775-4759. לא-ישראלי → נשמר עם +
 function fmtPhone(raw){
   if(!raw) return '—';
@@ -1529,6 +1718,8 @@ function mapLead(r){
     status: r.status||'new',
     followup_date: r.followup_date || null,
     followup: fmtDate(r.followup_date),
+    followup_message: r.followup_message || '',
+    followup_sent_at: r.followup_sent_at || null,
     created: fmtDate(r.created_at),
     created_at: r.created_at || null,   // גלם — למיון וגרפים
     wa_chat_id: r.wa_chat_id || null,
@@ -1558,7 +1749,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
     if(view === 'overview') renderOverview();
     if(view === 'today') renderTodayView();
     if(view === 'flow') renderFlow();
-    if(view === 'settings'){ renderKeywords(); renderQuestions(); loadTestThread(true); }
+    if(view === 'settings'){ renderKeywords(); renderQuestions(); renderJourney(); renderAutomations(); loadTestThread(true); }
   });
 });
 document.querySelectorAll('.menu-toggle').forEach(b => b.addEventListener('click', () => $('sidebar').classList.toggle('open')));
@@ -1838,6 +2029,13 @@ function openDrawer(id){
       <div class="field"><label>תאריך אירוע</label><input id="edit-event" type="text" value="${esc(l.event==='—'?'':l.event)}" placeholder="לדוגמה 22.10.26"></div>
       <div class="field"><label>מתי לחזור</label><input id="edit-followup" type="date" value="${l.followup_date? l.followup_date.slice(0,10) : ''}"></div>
     </div>
+    <div class="fu-box">
+      <div class="fu-head">📨 ההודעה שתישלח בתאריך החזרה
+        ${l.followup_sent_at ? '<span class="fu-badge">נשלחה ✓</span>' : ''}
+      </div>
+      <textarea id="edit-followup-msg" placeholder="${esc(setVal('followup_message'))}">${esc(l.followup_message||'')}</textarea>
+      <div class="fu-hint">${l.followup_sent_at ? 'ההודעה כבר נשלחה ללקוחה.' : 'ריק = ישתמש בניסוח ברירת המחדל מההגדרות. {{name}} יוחלף בשם הלקוחה.'}</div>
+    </div>
     <div class="field"><label>שירות מבוקש</label><input id="edit-service" type="text" value="${esc(l.service)}"></div>
     <div class="field"><label>סטטוס</label>
       <select id="edit-status">${STATUSES.map(s=>`<option value="${s.id}" ${s.id===l.status?'selected':''}>${s.label}</option>`).join('')}</select>
@@ -1920,10 +2118,11 @@ $('drawerSave').addEventListener('click', async () => {
   const wasClosed = curLead && curLead.status==='closed';
   const fields = {
     name:          $('edit-name').value.trim(),
-    phone:         $('edit-phone').value.trim() || null,
+    phone:         normPhone($('edit-phone').value),
     source:        $('edit-source').value,
     event_date:    $('edit-event').value.trim() || null,
     followup_date: $('edit-followup').value || null,
+    followup_message: $('edit-followup-msg').value.trim() || null,
     service:       $('edit-service').value.trim() || null,
     location:      $('edit-location').value.trim() || null,
     price:         $('edit-price').value !== '' ? Number($('edit-price').value) : null,
@@ -1962,7 +2161,7 @@ $('addSave').addEventListener('click', async () => {
   const lead = {
     source:        $('add-source').value,
     name,
-    phone:         $('add-phone').value.trim() || null,
+    phone:         normPhone($('add-phone').value),
     event_date:    $('add-event').value.trim() || null,
     service:       $('add-service').value.trim() || null,
     location:      $('add-location').value.trim() || null,
@@ -2045,6 +2244,8 @@ function renderQuestions(){
     item.querySelector('.q-del').addEventListener('click', async () => { popupQuestions.splice(i,1); await saveQuestions(); renderQuestions(); toast('שאלה הוסרה'); });
     wrap.appendChild(item);
   });
+  renderQMap();
+  renderJourney();
 }
 async function addQuestion(){
   const v = $('questionInput').value.trim(); if(!v) return;
@@ -2052,10 +2253,107 @@ async function addQuestion(){
 }
 $('questionAdd').addEventListener('click', addQuestion);
 $('questionInput').addEventListener('keydown', e => { if(e.key==='Enter') addQuestion(); });
-$('saveAdPrompt').addEventListener('click', async () => {
-  const { error } = await sb.from('settings').update({ value: $('adPromptText').value }).eq('key','ad_prompt');
-  toast(error ? 'שגיאה בשמירה' : 'טקסט הזיהוי נשמר');
+$('saveAdPrompt').addEventListener('click', () => saveSetting('ad_prompt', $('adPromptText').value, 'טקסט הזיהוי נשמר'));
+
+/* =========================================================
+   SETTINGS — לשוניות, מפת מסע ואוטומציות
+========================================================= */
+// ---- לשוניות שלבים ----
+document.querySelectorAll('#setTabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#setTabs button').forEach(x => x.classList.toggle('on', x===b));
+  document.querySelectorAll('.set-panel').forEach(p => p.classList.remove('active'));
+  $('set-' + b.dataset.t).classList.add('active');
+  if(b.dataset.t === 'test') loadTestThread(true);
+}));
+
+// ---- מפת מסע הלקוחה ----
+function renderJourney(){
+  const map = $('journeyMap'); if(!map) return;
+  const steps = [
+    { ic:'💬', t:'הודעה נכנסת', d:'הלקוחה פונה בוואטסאפ', on:true },
+    { ic:'🔍', t:'זיהוי', d:'מילת מפתח → נפתח ליד', on:true },
+    { ic:'❓', t:'שיחת פופ-אף', d:(popupQuestions.length||0)+' שאלות, אחת-אחת', on:true, auto:true },
+    { ic:'🔔', t:'תזכורת נטישה', d:'אם נעצרה — אחרי '+setVal('abandon_hours')+' שעות', on:setVal('abandon_enabled')!==false, auto:true },
+    { ic:'📨', t:'הודעת המשך', d:'בעוד '+setVal('followup_days')+' ימים', on:setVal('followup_enabled')!==false, auto:true },
+    { ic:'🗓️', t:'תזכורת אירוע', d:'יום לפני האירוע', on:setVal('event_reminder_enabled')!==false, auto:true },
+  ];
+  map.innerHTML = steps.map((s,i) =>
+    `<div class="jstep${s.auto?' auto':''}${s.on?'':' off'}"><span class="jic">${s.ic}</span><b>${s.t}</b><span class="jd">${esc(s.d)}</span></div>` +
+    (i < steps.length-1 ? '<div class="jarrow">←</div>' : '')
+  ).join('');
+}
+
+// ---- שבבי משתנים ({{name}}) ----
+function renderVarChips(){
+  document.querySelectorAll('.var-chips').forEach(box => {
+    if(box.dataset.done) return; box.dataset.done = '1';
+    box.innerHTML = '<span style="font-size:11.5px;color:var(--ink-faint);align-self:center">להוספה:</span>' +
+      '<button class="var-chip" data-v="{{name}}">שם הלקוחה</button>';
+    box.querySelectorAll('.var-chip').forEach(chip => chip.addEventListener('click', () => {
+      const ta = $(box.dataset.for); if(!ta) return;
+      const p = ta.selectionStart ?? ta.value.length;
+      ta.value = ta.value.slice(0,p) + chip.dataset.v + ta.value.slice(p);
+      ta.focus();
+    }));
+  });
+}
+
+// ---- מיפוי שאלה → שדה בליד ----
+const Q_FIELDS = ['שם הלקוחה','תאריך האירוע','סוג השירות'];
+function renderQMap(){
+  const el = $('qMap'); if(!el) return;
+  el.innerHTML = '<div class="qmap-t">לאיזה שדה נכנסת כל תשובה</div>' +
+    popupQuestions.map((q,i) => `<div class="qmap-row"><span class="qmap-badge">${i+1}</span><b>${esc(Q_FIELDS[i] || 'הערה נוספת')}</b> ← ${esc((q||'').slice(0,40))}${(q||'').length>40?'…':''}</div>`).join('') +
+    (popupQuestions.length > 3 ? '<div class="qmap-row" style="color:var(--ink-faint)">שאלות מעבר ל-3 נשמרות בהערות הליד</div>' : '');
+}
+
+// ---- אוטומציות: מילוי הטופס מהנתונים ----
+function renderAutomations(){
+  const bind = (ruleId, enabledEl, key) => {
+    const on = setVal(key) !== false;
+    $(enabledEl).checked = on;
+    $(ruleId).classList.toggle('on', on);
+    $(ruleId).classList.toggle('off', !on);
+  };
+  if(!$('abEnabled')) return;
+  $('abHours').value   = setVal('abandon_hours');
+  $('abMessage').value = setVal('abandon_message');
+  $('fuDays').value    = setVal('followup_days');
+  $('fuMessage').value = setVal('followup_message');
+  $('evMessage').value = setVal('event_reminder_message');
+  $('popupThanksText').value = setVal('popup_thanks');
+  $('setWindowMinutes').value = setVal('window_minutes');
+  $('setMaxScreened').value   = setVal('max_screened');
+  bind('ruleAbandon','abEnabled','abandon_enabled');
+  bind('ruleFollowup','fuEnabled','followup_enabled');
+  bind('ruleEvent','evEnabled','event_reminder_enabled');
+  renderVarChips();
+}
+
+// ---- מתגי הפעלה/כיבוי ----
+[['abEnabled','abandon_enabled','ruleAbandon'],['fuEnabled','followup_enabled','ruleFollowup'],['evEnabled','event_reminder_enabled','ruleEvent']]
+  .forEach(([el,key,rule]) => $(el).addEventListener('change', async () => {
+    const on = $(el).checked;
+    $(rule).classList.toggle('on', on); $(rule).classList.toggle('off', !on);
+    await saveSetting(key, on, on ? 'האוטומציה הופעלה ✓' : 'האוטומציה כובתה');
+  }));
+
+// ---- כפתורי שמירה ----
+$('saveAbandon').addEventListener('click', async () => {
+  await saveSetting('abandon_hours', Number($('abHours').value) || 6);
+  await saveSetting('abandon_message', $('abMessage').value, 'נשמר ✓');
 });
+$('saveFollowup').addEventListener('click', async () => {
+  await saveSetting('followup_days', Number($('fuDays').value) || 2);
+  await saveSetting('followup_message', $('fuMessage').value, 'נשמר ✓');
+});
+$('saveEvent').addEventListener('click', () => saveSetting('event_reminder_message', $('evMessage').value, 'נשמר ✓'));
+$('saveScreening').addEventListener('click', async () => {
+  await saveSetting('window_minutes', Number($('setWindowMinutes').value) || 60);
+  await saveSetting('max_screened', Number($('setMaxScreened').value) || 3, 'כללי הסינון נשמרו ✓');
+});
+document.querySelectorAll('.save-setting').forEach(b => b.addEventListener('click',
+  () => saveSetting(b.dataset.key, $(b.dataset.target).value, 'נשמר ✓')));
 
 $('testSendBtn').addEventListener('click', async () => {
   const phone = $('testPhone').value.trim();
@@ -2551,11 +2849,34 @@ async function loadKeywords(){
   const { data } = await sb.from('keywords').select('id,word').order('id');
   keywords = data || [];
 }
+let settingsMap = {};   // כל ההגדרות מה-DB (key → value)
+const SET_DEFAULTS = {
+  popup_thanks: 'תודה רבה! קלטנו את הפרטים ונחזור אלייך בהקדם ✨',
+  window_minutes: 60, max_screened: 3,
+  followup_enabled: true, followup_days: 2,
+  followup_message: 'היי {{name}} 💕 רק רציתי לבדוק אם חשבת על זה? אשמח לענות על כל שאלה ✨',
+  abandon_enabled: true, abandon_hours: 6,
+  abandon_message: 'היי {{name}} 🌸 נשאר לי רק עוד פרט קטן כדי לשמור לך מקום — נשמח שתשלימי 💕',
+  event_reminder_enabled: true,
+  event_reminder_message: 'היי {{name}} 💕 מחר היום הגדול! מתרגשת לקראתך ✨ נתראה מחר',
+};
+const setVal = k => settingsMap[k] !== undefined && settingsMap[k] !== null ? settingsMap[k] : SET_DEFAULTS[k];
+
 async function loadSettings(){
   const { data } = await sb.from('settings').select('key,value');
-  const map = {}; (data||[]).forEach(r => map[r.key]=r.value);
-  popupQuestions = Array.isArray(map.popup_questions) ? map.popup_questions : [];
-  if(map.ad_prompt != null) $('adPromptText').value = map.ad_prompt;
+  settingsMap = {}; (data||[]).forEach(r => settingsMap[r.key]=r.value);
+  popupQuestions = Array.isArray(settingsMap.popup_questions) ? settingsMap.popup_questions : [];
+  if(settingsMap.ad_prompt != null) $('adPromptText').value = settingsMap.ad_prompt;
+}
+
+// שמירת הגדרה בודדת (upsert — עובד גם אם המפתח עוד לא קיים)
+async function saveSetting(key, value, okMsg){
+  const { error } = await sb.from('settings').upsert({ key, value });
+  if(error){ toast('שגיאה בשמירה'); return false; }
+  settingsMap[key] = value;
+  if(okMsg) toast(okMsg);
+  renderJourney();
+  return true;
 }
 async function dbInsertLead(o){ const { error } = await sb.from('leads').insert(o); if(error) throw error; }
 async function dbUpdateLead(id,f){ const { error } = await sb.from('leads').update(f).eq('id',id); if(error) throw error; }
