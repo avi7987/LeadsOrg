@@ -1505,6 +1505,50 @@
             <button class="btn btn-ghost" id="saveEvent">שמירה</button>
           </div>
         </div>
+
+        <!-- rule: post event (brides only) -->
+        <div class="rule" id="rulePost">
+          <div class="rule-head">
+            <span class="rule-ic">👑</span>
+            <div class="rule-t">
+              <h3>הודעת "יום אחרי" — לכלות בלבד</h3>
+              <span class="rule-when">אחרי האירוע: תודה + בקשה לתיוג והמלצה ברשתות החברתיות</span>
+            </div>
+            <label class="sw-wrap"><input type="checkbox" id="peEnabled" class="switch-input"><span class="switch"></span></label>
+          </div>
+          <div class="rule-body">
+            <div class="field" style="max-width:220px">
+              <label>כמה שעות אחרי האירוע?</label>
+              <input type="number" id="peHours" min="6" max="336">
+            </div>
+            <div class="field">
+              <label>ניסוח ההודעה</label>
+              <textarea id="peMessage" style="min-height:120px"></textarea>
+            </div>
+            <div class="var-chips" data-for="peMessage"></div>
+            <div class="smart-note">👑 נשלחת <b>רק לכלות</b> (מסומנות בכתר) שבסטטוס "סגרה" — הרגע שבו הן הכי מרוצות והסיכוי להמלצה הגבוה ביותר.</div>
+            <button class="btn btn-ghost" id="savePost">שמירה</button>
+          </div>
+        </div>
+
+        <!-- quiet hours -->
+        <div class="rule on" id="ruleWindow">
+          <div class="rule-head">
+            <span class="rule-ic">🌙</span>
+            <div class="rule-t">
+              <h3>שעות שליחה מותרות</h3>
+              <span class="rule-when">אף הודעה אוטומטית לא תישלח מחוץ לחלון — היא תמתין לבוקר</span>
+            </div>
+          </div>
+          <div class="rule-body">
+            <div class="field-row" style="max-width:340px">
+              <div class="field"><label>משעה</label><input type="time" id="sendStart"></div>
+              <div class="field"><label>עד שעה</label><input type="time" id="sendEnd"></div>
+            </div>
+            <div class="smart-note">🕐 לפי שעון ישראל. חל על כל ארבע האוטומציות. <b>תשובות בשיחת הפופ-אפ עצמה נשלחות תמיד</b> — כי הלקוחה כתבה באותו רגע ומחכה לתשובה.</div>
+            <button class="btn btn-ghost" id="saveWindow">שמירת שעות</button>
+          </div>
+        </div>
       </div>
 
       <!-- ===== בדיקה ===== -->
@@ -2276,6 +2320,7 @@ function renderJourney(){
     { ic:'🔔', t:'תזכורת נטישה', d:'אם נעצרה — אחרי '+setVal('abandon_hours')+' שעות', on:setVal('abandon_enabled')!==false, auto:true },
     { ic:'📨', t:'הודעת המשך', d:'בעוד '+setVal('followup_days')+' ימים', on:setVal('followup_enabled')!==false, auto:true },
     { ic:'🗓️', t:'תזכורת אירוע', d:'יום לפני האירוע', on:setVal('event_reminder_enabled')!==false, auto:true },
+    { ic:'👑', t:'יום אחרי (כלות)', d:setVal('post_event_hours')+' שעות אחרי — בקשת המלצה', on:setVal('post_event_enabled')!==false, auto:true },
   ];
   map.innerHTML = steps.map((s,i) =>
     `<div class="jstep${s.auto?' auto':''}${s.on?'':' off'}"><span class="jic">${s.ic}</span><b>${s.t}</b><span class="jd">${esc(s.d)}</span></div>` +
@@ -2321,17 +2366,22 @@ function renderAutomations(){
   $('fuDays').value    = setVal('followup_days');
   $('fuMessage').value = setVal('followup_message');
   $('evMessage').value = setVal('event_reminder_message');
+  $('peHours').value   = setVal('post_event_hours');
+  $('peMessage').value = setVal('post_event_message');
+  $('sendStart').value = setVal('send_start');
+  $('sendEnd').value   = setVal('send_end');
   $('popupThanksText').value = setVal('popup_thanks');
   $('setWindowMinutes').value = setVal('window_minutes');
   $('setMaxScreened').value   = setVal('max_screened');
   bind('ruleAbandon','abEnabled','abandon_enabled');
   bind('ruleFollowup','fuEnabled','followup_enabled');
   bind('ruleEvent','evEnabled','event_reminder_enabled');
+  bind('rulePost','peEnabled','post_event_enabled');
   renderVarChips();
 }
 
 // ---- מתגי הפעלה/כיבוי ----
-[['abEnabled','abandon_enabled','ruleAbandon'],['fuEnabled','followup_enabled','ruleFollowup'],['evEnabled','event_reminder_enabled','ruleEvent']]
+[['abEnabled','abandon_enabled','ruleAbandon'],['fuEnabled','followup_enabled','ruleFollowup'],['evEnabled','event_reminder_enabled','ruleEvent'],['peEnabled','post_event_enabled','rulePost']]
   .forEach(([el,key,rule]) => $(el).addEventListener('change', async () => {
     const on = $(el).checked;
     $(rule).classList.toggle('on', on); $(rule).classList.toggle('off', !on);
@@ -2348,6 +2398,15 @@ $('saveFollowup').addEventListener('click', async () => {
   await saveSetting('followup_message', $('fuMessage').value, 'נשמר ✓');
 });
 $('saveEvent').addEventListener('click', () => saveSetting('event_reminder_message', $('evMessage').value, 'נשמר ✓'));
+$('savePost').addEventListener('click', async () => {
+  await saveSetting('post_event_hours', Number($('peHours').value) || 48);
+  await saveSetting('post_event_message', $('peMessage').value, 'נשמר ✓');
+});
+$('saveWindow').addEventListener('click', async () => {
+  const s = $('sendStart').value || '08:30', e = $('sendEnd').value || '21:30';
+  await saveSetting('send_start', s);
+  await saveSetting('send_end', e, `הודעות יישלחו בין ${s} ל-${e} ✓`);
+});
 $('saveScreening').addEventListener('click', async () => {
   await saveSetting('window_minutes', Number($('setWindowMinutes').value) || 60);
   await saveSetting('max_screened', Number($('setMaxScreened').value) || 3, 'כללי הסינון נשמרו ✓');
@@ -2859,6 +2918,9 @@ const SET_DEFAULTS = {
   abandon_message: 'היי {{name}} 🌸 נשאר לי רק עוד פרט קטן כדי לשמור לך מקום — נשמח שתשלימי 💕',
   event_reminder_enabled: true,
   event_reminder_message: 'היי {{name}} 💕 מחר היום הגדול! מתרגשת לקראתך ✨ נתראה מחר',
+  post_event_enabled: true, post_event_hours: 48,
+  post_event_message: 'היי {{name}} 💕 איזה כיף היה להיות חלק מהיום הגדול שלך! מקווה שנהנית ושהרגשת מהממת ✨\n\nאם בא לך לשמח אותי — אשמח מאוד לתגובה או תיוג שלי בסטורי/פוסט 🙏 זה עוזר לי יותר מכל דבר, וכמובן שאשמח גם להמלצה חמה לחברות שמתחתנות 💍',
+  send_start: '08:30', send_end: '21:30',
 };
 const setVal = k => settingsMap[k] !== undefined && settingsMap[k] !== null ? settingsMap[k] : SET_DEFAULTS[k];
 

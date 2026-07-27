@@ -121,6 +121,13 @@ export async function getConfig() {
     abandonExpireHours: Number(s.abandon_expire_hours ?? 72),
     eventReminderEnabled: s.event_reminder_enabled !== false,
     eventReminderMessage: s.event_reminder_message || 'היי {{name}} 💕 מחר היום הגדול! מתרגשת לקראתך ✨ נתראה מחר',
+    // הודעת "יום אחרי" — לכלות בלבד
+    postEventEnabled: s.post_event_enabled !== false,
+    postEventHours:   Number(s.post_event_hours ?? 48),
+    postEventMessage: s.post_event_message || 'היי {{name}} 💕 איזה כיף היה להיות חלק מהיום הגדול שלך! אשמח מאוד לתגובה או תיוג שלי בסטורי 🙏',
+    // חלון שעות מותר לשליחה (שעון ישראל)
+    sendStart: s.send_start || '08:30',
+    sendEnd:   s.send_end   || '21:30',
   };
   _cacheAt = Date.now();
   return _cache;

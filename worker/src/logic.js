@@ -199,6 +199,7 @@ async function startPopup({ client, phone, leadId, cfg, seed = '' }) {
   if (!questions.length) return;
   // מה שכבר ידוע מההודעה שפתחה את השיחה
   const answers = harvest(seed, {});
+  answers.__last = new Date().toISOString();   // חתימת פעילות — לחישוב תזכורת נטישה
   if (Object.keys(answers).length) console.log(`   🎯 זוהה מראש: ${JSON.stringify(answers)}`);
   const step = nextAskStep(0, questions, answers);
   await db.createPopupSession(phone, leadId);
@@ -218,6 +219,7 @@ async function handlePopupAnswer({ client, phone, body, session, cfg }) {
   const field = FIELD_BY_STEP[session.step] || `q${session.step}`;
   answers[field] = body;
   Object.assign(answers, harvest(body, answers));   // אולי מסרה כמה פרטים בבת אחת
+  answers.__last = new Date().toISOString();        // עדכון זמן הפעילות האחרונה
 
   const next = nextAskStep(session.step + 1, questions, answers);
   if (next !== null) {
