@@ -1344,7 +1344,7 @@
       <!-- ניווט בין שלבים -->
       <div class="set-tabs" id="setTabs">
         <button data-t="detect" class="on"><span>1</span> זיהוי לידים</button>
-        <button data-t="convo"><span>2</span> שיחת הפופ-אף</button>
+        <button data-t="convo"><span>2</span> שיחת הפופ-אפ</button>
         <button data-t="auto"><span>3</span> אוטומציות המשך</button>
         <button data-t="test"><span>🧪</span> בדיקה</button>
       </div>
@@ -1358,7 +1358,7 @@
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg></div>
             <div><h3>מילות מפתח</h3></div>
           </div>
-          <p class="card-desc">כשאחת מההודעות הראשונות של לקוחה חדשה מכילה מילת מפתח — נפתח ליד ונשלחת אליה שיחת הפופ-אף אוטומטית.</p>
+          <p class="card-desc">כשאחת מההודעות הראשונות של לקוחה חדשה מכילה מילת מפתח — נפתח ליד ונשלחת אליה שיחת הפופ-אפ אוטומטית.</p>
           <div class="chips" id="keywordChips"></div>
           <div class="add-inline">
             <input type="text" id="keywordInput" placeholder="הוספת מילת מפתח...">
@@ -1372,7 +1372,7 @@
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg></div>
             <div><h3>זיהוי פרסום ממומן</h3></div>
           </div>
-          <p class="card-desc">הודעת הפתיחה שמגיעה מלחיצה על מודעה בפייסבוק/אינסטגרם. זיהויה מתייג את הליד אוטומטית כ"פרסום" — בלי פופ-אף נוסף.</p>
+          <p class="card-desc">הודעת הפתיחה שמגיעה מלחיצה על מודעה בפייסבוק/אינסטגרם. זיהויה מתייג את הליד אוטומטית כ"פרסום" — בלי פופ-אפ נוסף.</p>
           <div class="field">
             <label>טקסט הזיהוי של המודעה</label>
             <textarea id="adPromptText">היי! הגעתי דרך המודעה שלך על איפור ושיער לאירועים ✨</textarea>
@@ -1399,13 +1399,13 @@
         </div>
       </div>
 
-      <!-- ===== שלב 2: שיחת הפופ-אף ===== -->
+      <!-- ===== שלב 2: שיחת הפופ-אפ ===== -->
       <div class="set-panel" id="set-convo">
         <div class="settings-grid">
         <div class="card">
           <div class="card-head">
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div><h3>שאלות הפופ-אף</h3></div>
+            <div><h3>שאלות הפופ-אפ</h3></div>
           </div>
           <p class="card-desc">רצף השאלות שנשלח ללקוחה — כל שאלה מגיעה רק אחרי שענתה על הקודמת. התשובות נכנסות ישירות לכרטיס הליד.</p>
           <div class="smart-note">🎯 <b>חכם:</b> אם הלקוחה כבר מסרה פרט בהודעה שלה (למשל "אני כלה, מחפשת איפור ל-20.9") — המערכת מזהה זאת ו<b>מדלגת</b> על השאלה המיותרת.</div>
@@ -1513,13 +1513,13 @@
         <div class="card">
           <div class="card-head">
             <div class="ch-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></div>
-            <div><h3>בדיקת פופ-אף חי</h3></div>
+            <div><h3>בדיקת פופ-אפ חי</h3></div>
           </div>
           <p class="card-desc">המערכת תתחיל איתך שיחה בוואטסאפ בדיוק כמו עם לקוחה חדשה — <b>כל שאלה תגיע רק אחרי שתעני על הקודמת</b>. הזיני מספר <b>שונה מהמספר המחובר</b>.</p>
           <div class="field"><label>מספר לבדיקה</label><input type="text" id="testPhone" placeholder="050-0000000"></div>
           <button class="btn btn-wa btn-block" id="testSendBtn">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg>
-            שליחת פופ-אף לבדיקה
+            שליחת פופ-אפ לבדיקה
           </button>
           <p class="card-desc" id="testHint" style="margin-top:10px; margin-bottom:0"></p>
           <div class="test-thread" id="testThread"></div>
@@ -2272,7 +2272,7 @@ function renderJourney(){
   const steps = [
     { ic:'💬', t:'הודעה נכנסת', d:'הלקוחה פונה בוואטסאפ', on:true },
     { ic:'🔍', t:'זיהוי', d:'מילת מפתח → נפתח ליד', on:true },
-    { ic:'❓', t:'שיחת פופ-אף', d:(popupQuestions.length||0)+' שאלות, אחת-אחת', on:true, auto:true },
+    { ic:'❓', t:'שיחת פופ-אפ', d:(popupQuestions.length||0)+' שאלות, אחת-אחת', on:true, auto:true },
     { ic:'🔔', t:'תזכורת נטישה', d:'אם נעצרה — אחרי '+setVal('abandon_hours')+' שעות', on:setVal('abandon_enabled')!==false, auto:true },
     { ic:'📨', t:'הודעת המשך', d:'בעוד '+setVal('followup_days')+' ימים', on:setVal('followup_enabled')!==false, auto:true },
     { ic:'🗓️', t:'תזכורת אירוע', d:'יום לפני האירוע', on:setVal('event_reminder_enabled')!==false, auto:true },
@@ -2385,7 +2385,7 @@ async function loadTestThread(force){
   const head = '<div class="tt-head"><span>שיחת הבדיקה החיה</span><span class="tt-live"><span class="rt-dot"></span>מתעדכן</span></div>';
   wrap.innerHTML = head + (msgs.length
     ? renderConversation(msgs)
-    : '<div class="tt-empty">אין עדיין הודעות למספר הזה.<br>שלחי פופ-אף, ותראי כאן את השיחה מתגלגלת בזמן אמת.</div>');
+    : '<div class="tt-empty">אין עדיין הודעות למספר הזה.<br>שלחי פופ-אפ, ותראי כאן את השיחה מתגלגלת בזמן אמת.</div>');
   const pv = wrap.querySelector('.wa-preview'); if(pv) pv.scrollTop = pv.scrollHeight;
 }
 $('testPhone').addEventListener('input', () => loadTestThread(true));
