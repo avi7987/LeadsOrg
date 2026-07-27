@@ -6,38 +6,39 @@
 <title>לוח הלידים · איה</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-a: #FBF4F3;
-    --bg-b: #F3E7EA;
+    /* מערכת עיצוב חדשה (2026) */
+    --bg-a: #FFF8F7;
+    --bg-b: #FDF1F4;
     --panel: #FFFFFF;
-    --panel-2: #FDF8F9;
-    --ink: #3B2A33;
-    --ink-soft: #9C8791;
-    --ink-faint: #C3B0B7;
-    --line: #F1E1E4;
-    --line-soft: #F8EEF0;
-    --rose: #B4778A;
-    --rose-deep: #7D4257;
-    --rose-pale: #F3E1E6;
+    --panel-2: #FDF5F7;
+    --ink: #2D2D2D;
+    --ink-soft: #7A7A7A;
+    --ink-faint: #A9A2A4;
+    --line: #EFE7EA;
+    --line-soft: #F6EFF1;
+    --rose: #D68FA4;
+    --rose-deep: #C2758E;
+    --rose-pale: #FBEEF2;
     --gold: #C6A05E;
-    --gold-deep: #A17F3F;
-    --gold-soft: #F7EBD4;
+    --gold-deep: #B98A2E;
+    --gold-soft: #FBF3E3;
 
     --wa: #25A768;
     --wa-soft: #E4F4EA;
 
-    --status-new-bg: #FCEADD;    --status-new-ink: #B0713A;   --status-new-dot:#E0A365;
-    --status-noanswer-bg: #F8E1E3; --status-noanswer-ink: #A75C68; --status-noanswer-dot:#D68894;
-    --status-followup-bg: #FBF1D9; --status-followup-ink: #977B2E; --status-followup-dot:#DCB865;
-    --status-closed-bg: #E5EFE7;  --status-closed-ink: #4F7A5D;  --status-closed-dot:#7FAA8C;
-    --status-lost-bg: #EFEAE8;    --status-lost-ink: #8B7D78;    --status-lost-dot:#B0A29C;
+    --status-new-bg: #E9F1FE;      --status-new-ink: #2F6FB8;      --status-new-dot:#2F6FB8;
+    --status-noanswer-bg: #FFF5D9; --status-noanswer-ink: #977B1E; --status-noanswer-dot:#977B1E;
+    --status-followup-bg: #FCE4EE; --status-followup-ink: #C0416F; --status-followup-dot:#C0416F;
+    --status-closed-bg: #E3F5E9;   --status-closed-ink: #39885A;   --status-closed-dot:#39885A;
+    --status-lost-bg: #EEECEC;     --status-lost-ink: #83807F;     --status-lost-dot:#83807F;
 
-    --shadow-sm: 0 2px 8px -4px rgba(125,66,87,0.14);
-    --shadow-md: 0 10px 26px -12px rgba(125,66,87,0.30);
-    --shadow-lg: 0 30px 60px -24px rgba(125,66,87,0.40);
-    --radius: 18px;
+    --shadow-sm: 0 2px 10px rgba(0,0,0,0.04);
+    --shadow-md: 0 12px 30px -12px rgba(0,0,0,0.09);
+    --shadow-lg: 0 20px 50px -18px rgba(45,45,45,0.22);
+    --radius: 20px;
   }
 
   *{ box-sizing: border-box; }
@@ -49,7 +50,7 @@
     background: linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 100%);
     background-attachment: fixed;
     color: var(--ink);
-    font-family: 'Assistant', sans-serif;
+    font-family: 'Manrope', 'Heebo', sans-serif;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
@@ -88,7 +89,7 @@
     border-radius: 14px;
     background: linear-gradient(150deg, var(--rose) 0%, var(--rose-deep) 100%);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Frank Ruhl Libre', serif;
+    font-family:'Manrope', sans-serif;
     font-style: italic;
     color: #FBF0E9;
     font-size: 21px; font-weight:600;
@@ -100,7 +101,7 @@
     color: var(--gold-deep); display:block; margin-bottom:2px;
   }
   .side-brand .bt-name{
-    font-family:'Frank Ruhl Libre', serif;
+    font-family:'Manrope', sans-serif;
     font-size: 19px; font-weight:600; color: var(--rose-deep); line-height:1;
   }
 
@@ -176,7 +177,7 @@
     color: var(--gold-deep); display:block; margin-bottom:4px;
   }
   .page-head h1{
-    font-family:'Frank Ruhl Libre', serif;
+    font-family:'Manrope', sans-serif;
     font-weight:600; font-size:28px; margin:0 0 4px;
     color: var(--rose-deep); letter-spacing:-.3px;
   }
@@ -201,7 +202,7 @@
   .kpi .kdot{ width:9px; height:9px; border-radius:999px; }
   .kpi .klabel{ font-size:12px; color:var(--ink-soft); font-weight:500; }
   .kpi .knum{
-    font-family:'Frank Ruhl Libre', serif;
+    font-family:'Manrope', sans-serif;
     font-size:30px; font-weight:600; color:var(--ink);
     line-height:1; font-variant-numeric: tabular-nums;
   }
@@ -231,7 +232,7 @@
     display:flex; align-items:center; justify-content:center;
     font-size:18px; flex-shrink:0;
   }
-  .followup-banner .fb-num{ font-family:'Frank Ruhl Libre', serif; font-size:24px; font-weight:600; color:var(--gold-soft); }
+  .followup-banner .fb-num{ font-family:'Manrope', sans-serif; font-size:24px; font-weight:600; color:var(--gold-soft); }
   .followup-banner .fb-text{ font-size:14px; opacity:.94; font-weight:300; }
   .followup-banner .fb-sub{ font-size:11.5px; opacity:.72; margin-inline-start:auto; font-weight:300; display:flex; align-items:center; gap:6px; }
 
@@ -292,7 +293,7 @@
 
   .toolbar-push{ margin-inline-start:auto; display:flex; gap:10px; align-items:center; }
   .result-note{ font-size:12.5px; color:var(--ink-faint); }
-  .hint-text{ font-size:12px; color:var(--ink-faint); font-style:italic; font-family:'Frank Ruhl Libre', serif; }
+  .hint-text{ font-size:12px; color:var(--ink-faint); font-style:italic; font-family:'Manrope', sans-serif; }
 
   /* ---- Table ---- */
   .table-shell{
@@ -379,7 +380,7 @@
   .empty-state{ text-align:center; padding:60px 20px; color:var(--ink-soft); }
   .empty-state strong{
     display:block; color:var(--rose-deep);
-    font-family:'Frank Ruhl Libre', serif; font-weight:500; font-size:18px; margin-bottom:6px;
+    font-family:'Manrope', sans-serif; font-weight:500; font-size:18px; margin-bottom:6px;
   }
 
   /* ---- Popover (status) ---- */
@@ -453,7 +454,7 @@
     box-shadow: 0 8px 18px -8px rgba(125,66,87,0.5);
   }
   .drawer-head h2{
-    margin:0 0 3px; font-family:'Frank Ruhl Libre', serif;
+    margin:0 0 3px; font-family:'Manrope', sans-serif;
     font-weight:600; font-size:21px; color:var(--rose-deep);
   }
   .drawer-head .dh-phone{ font-size:13px; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
@@ -499,7 +500,7 @@
     font-size:13px; font-weight:600;
   }
   .balance-line.show{ display:flex; }
-  .balance-line b{ font-size:15px; font-family:'Frank Ruhl Libre',serif; }
+  .balance-line b{ font-size:15px; font-family:'Manrope',sans-serif; }
   :root[data-theme="dark"] .balance-line{ color:#93CCA4; }
 
   /* מתג "לקוחה כלה" */
@@ -526,14 +527,14 @@
   .ov-bride{ background:linear-gradient(160deg, var(--gold-soft), var(--panel)); border-color:var(--gold); }
   .bride-stats{ display:flex; align-items:center; gap:16px; }
   .bride-stats .bs-main{ text-align:center; flex-shrink:0; }
-  .bride-stats .bs-num{ font-family:'Frank Ruhl Libre',serif; font-size:40px; font-weight:600; color:var(--gold-deep); line-height:1; }
+  .bride-stats .bs-num{ font-family:'Manrope',sans-serif; font-size:40px; font-weight:600; color:var(--gold-deep); line-height:1; }
   .bride-stats .bs-lbl{ font-size:11px; color:var(--ink-soft); margin-top:3px; }
   .bride-stats .bs-grid{ flex:1; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; text-align:center; }
   .bride-stats .bs-grid > div{ background:var(--panel); border:1px solid var(--line-soft); border-radius:10px; padding:8px 4px; }
-  .bride-stats .bs-grid b{ display:block; font-size:16px; color:var(--ink); font-family:'Frank Ruhl Libre',serif; }
+  .bride-stats .bs-grid b{ display:block; font-size:16px; color:var(--ink); font-family:'Manrope',sans-serif; }
   .bride-stats .bs-grid span{ font-size:10px; color:var(--ink-soft); }
   .bs-rev{ margin-top:12px; font-size:12px; color:var(--ink-soft); text-align:center; background:var(--panel); border-radius:10px; padding:8px; }
-  .bs-rev b{ color:var(--gold-deep); font-family:'Frank Ruhl Libre',serif; font-size:14px; }
+  .bs-rev b{ color:var(--gold-deep); font-family:'Manrope',sans-serif; font-size:14px; }
   .bs-filter{ margin-top:12px; width:100%; border:none; background:transparent; color:var(--gold-deep); font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit; padding:7px; border-radius:8px; transition:background .12s; }
   .bs-filter:hover{ background:var(--gold-soft); }
 
@@ -601,7 +602,7 @@
     background: var(--rose-pale); color:var(--rose-deep);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
-  .modal-head h2{ margin:0; font-family:'Frank Ruhl Libre',serif; font-weight:600; font-size:20px; color:var(--rose-deep); }
+  .modal-head h2{ margin:0; font-family:'Manrope',sans-serif; font-weight:600; font-size:20px; color:var(--rose-deep); }
   .modal-head .mh-sub{ font-size:12px; color:var(--ink-soft); }
   .modal-body{ padding:22px 24px; }
   .modal-foot{ padding:16px 24px 22px; display:flex; gap:10px; justify-content:flex-start; }
@@ -618,7 +619,7 @@
     background: var(--gold-soft); color:var(--gold-deep);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
-  .card-head h3{ margin:0; font-family:'Frank Ruhl Libre',serif; font-weight:600; font-size:17px; color:var(--rose-deep); }
+  .card-head h3{ margin:0; font-family:'Manrope',sans-serif; font-weight:600; font-size:17px; color:var(--rose-deep); }
   .card-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.55; margin:8px 0 16px; font-weight:300; }
 
   .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
@@ -737,6 +738,76 @@
   }
   @media (min-width:901px){ .menu-toggle{ display:none; } }
 
+  /* ============ REDESIGN — Leads page ============ */
+  .rhead{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:24px; }
+  .rhead h1{ font-family:'Manrope',sans-serif; font-size:32px; font-weight:800; margin:0 0 4px; letter-spacing:-.4px; color:var(--ink); }
+  .rhead .rsub{ color:var(--ink-soft); font-size:15px; }
+  .rhead .rcnt{ display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-size:13px; color:var(--rose-deep); background:var(--rose-pale); padding:5px 12px; border-radius:999px; font-weight:600; }
+  .rhead-actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .rbtn{ display:inline-flex; align-items:center; gap:8px; border:none; cursor:pointer; border-radius:13px; font-size:14px; font-weight:700; padding:12px 18px; font-family:inherit; transition:transform .12s, box-shadow .15s, background .15s; }
+  .rbtn svg{ width:17px;height:17px; stroke-width:2.2; }
+  .rbtn-pri{ background:linear-gradient(150deg,var(--rose),var(--rose-deep)); color:#fff; box-shadow:0 10px 22px -10px rgba(214,143,164,.75); }
+  .rbtn-pri:hover{ transform:translateY(-2px); }
+  .rbtn-ghost{ background:var(--panel); color:var(--ink); border:1px solid var(--line); box-shadow:var(--shadow-sm); }
+  .rbtn-ghost:hover{ background:var(--rose-pale); color:var(--rose-deep); }
+
+  .rkpis{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+  .rkpi{ background:var(--panel); border:1px solid var(--line-soft); border-radius:18px; padding:16px 18px; box-shadow:var(--shadow-sm); cursor:pointer; transition:transform .14s, box-shadow .14s; }
+  .rkpi:hover{ transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .rkpi.on{ border-color:var(--rose); box-shadow:0 0 0 3px var(--rose-pale); }
+  .rkpi .rkt{ display:flex; align-items:center; gap:8px; color:var(--ink-soft); font-size:13px; font-weight:600; margin-bottom:10px; }
+  .rkpi .rki{ width:30px;height:30px;border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .rkpi .rkn{ font-family:'Manrope',sans-serif; font-size:30px; font-weight:800; line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .rkpi .rkf{ font-size:12px; color:var(--ink-faint); margin-top:6px; font-weight:500; }
+
+  .rtoolbar{ display:flex; gap:10px; align-items:center; background:var(--panel); border:1px solid var(--line-soft); border-radius:16px; padding:12px 14px; margin-bottom:18px; box-shadow:var(--shadow-sm); flex-wrap:wrap; }
+  .rsearch{ position:relative; flex:1 1 280px; min-width:200px; }
+  .rsearch input{ width:100%; padding:12px 44px 12px 16px; border-radius:12px; border:1px solid var(--line); background:var(--bg-a); font-size:15px; color:var(--ink); outline:none; font-family:inherit; transition:border-color .15s, box-shadow .15s; }
+  .rsearch input::placeholder{ color:var(--ink-faint); }
+  .rsearch input:focus{ border-color:var(--rose); box-shadow:0 0 0 4px var(--rose-pale); background:var(--panel); }
+  .rsearch svg{ position:absolute; right:15px; top:50%; transform:translateY(-50%); color:var(--ink-faint); }
+  .rpill{ display:inline-flex; align-items:center; gap:8px; padding:11px 15px; border-radius:999px; border:1px solid var(--line); background:var(--bg-a); color:var(--ink-soft); font-size:13.5px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s, border-color .15s, color .15s; }
+  .rpill:hover{ border-color:var(--rose); color:var(--rose-deep); }
+  .rpill.active{ background:var(--rose-pale); border-color:var(--rose); color:var(--rose-deep); }
+  .rpill svg{ width:14px;height:14px; opacity:.7; }
+  .rpill select{ appearance:none; -webkit-appearance:none; border:none; background:none; font:inherit; color:inherit; cursor:pointer; padding:0; outline:none; }
+  .rclearf{ border:none; background:none; color:var(--rose-deep); font-weight:700; font-size:13px; cursor:pointer; padding:8px 10px; border-radius:10px; font-family:inherit; }
+  .rclearf:hover{ background:var(--rose-pale); }
+
+  .rtable-card{ background:var(--panel); border-radius:24px; box-shadow:0 12px 40px rgba(0,0,0,.05); padding:8px; overflow-x:auto; }
+  table.rtable{ width:100%; min-width:820px; border-collapse:collapse; }
+  .rtable thead th{ text-align:right; font-size:13px; font-weight:700; color:var(--ink-soft); padding:16px 20px; white-space:nowrap; background:none; border:none; position:static; }
+  .rtable thead th:first-child{ padding-inline-start:22px; }
+  .rtable tbody tr{ cursor:pointer; transition:background .12s; }
+  .rtable tbody tr:hover{ background:var(--bg-a); }
+  .rtable tbody td{ padding:0 20px; height:70px; vertical-align:middle; font-size:15px; border-top:1px solid var(--line-soft); border-bottom:none; }
+  .rtable tbody tr:first-child td{ border-top:none; }
+  .rtable tbody td:first-child{ padding-inline-start:22px; }
+  .rcust{ display:flex; align-items:center; gap:12px; }
+  .rav{ width:38px;height:38px;border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; background:var(--rose-pale); color:var(--rose-deep); }
+  .rav.bride{ background:linear-gradient(150deg,#F0D48A,#D9B15E); color:#5b451a; }
+  .rcust .rnm{ font-weight:700; color:var(--ink); display:flex; align-items:center; gap:7px; }
+  .rcust .rmeta{ font-size:12.5px; color:var(--ink-faint); font-weight:500; margin-top:1px; }
+  .rphone{ direction:ltr; text-align:right; font-weight:500; font-variant-numeric:tabular-nums; }
+  .rbadge{ display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:700; white-space:nowrap; }
+  .rbadge .rdot{ width:6px;height:6px;border-radius:999px; }
+  .ract{ color:var(--ink-soft); font-size:13.5px; font-weight:500; white-space:nowrap; }
+  .ract.stale{ color:#C0416F; font-weight:700; }
+  .row-actions{ display:flex; gap:7px; justify-content:flex-start; opacity:0; transform:translateX(6px); transition:opacity .14s, transform .14s; }
+  .rtable tbody tr:hover .row-actions{ opacity:1; transform:none; }
+  .riact{ width:34px;height:34px;border-radius:10px; border:1px solid var(--line); background:var(--panel); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-soft); transition:all .12s; }
+  .riact:hover{ color:var(--rose-deep); border-color:var(--rose); background:var(--rose-pale); }
+  .riact.wa:hover{ color:#25A768; border-color:#8fd7b0; background:#EAF7EF; }
+  .riact svg{ width:16px;height:16px; }
+  .rpager{ display:flex; align-items:center; justify-content:space-between; margin-top:18px; padding:0 6px; flex-wrap:wrap; gap:10px; }
+  .rpager .rpinfo{ color:var(--ink-soft); font-size:13.5px; }
+  .rpager .rppages{ display:flex; gap:6px; }
+  .rpg{ min-width:36px;height:36px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--ink-soft); font-weight:700; font-size:14px; cursor:pointer; font-family:inherit; }
+  .rpg:hover{ border-color:var(--rose); color:var(--rose-deep); }
+  .rpg.on{ background:linear-gradient(150deg,var(--rose),var(--rose-deep)); color:#fff; border-color:transparent; }
+  .rpg:disabled{ opacity:.4; cursor:default; }
+  @media (max-width:1050px){ .rkpis{ grid-template-columns:repeat(2,1fr); } }
+
   /* ---- Login ---- */
   .login-scrim{
     position:fixed; inset:0; z-index:300;
@@ -749,7 +820,7 @@
     padding:36px 32px 30px; width:min(370px,100%); text-align:center;
   }
   .login-card .brand-mark{ margin:0 auto 16px; width:54px; height:54px; font-size:24px; border-radius:16px; }
-  .login-card h2{ font-family:'Frank Ruhl Libre',serif; font-weight:600; font-size:23px; color:var(--rose-deep); margin:0 0 4px; }
+  .login-card h2{ font-family:'Manrope',sans-serif; font-weight:600; font-size:23px; color:var(--rose-deep); margin:0 0 4px; }
   .login-card .lp{ font-size:13px; color:var(--ink-soft); margin:0 0 22px; font-weight:300; }
   .login-card .field{ text-align:right; }
   .login-err{ color:#B4636F; font-size:12.5px; min-height:18px; margin:2px 2px 12px; text-align:right; }
@@ -848,7 +919,7 @@
 
   /* stat tile */
   .ov-stat .os-num{
-    font-family:'Frank Ruhl Libre',serif; font-size:34px; font-weight:600;
+    font-family:'Manrope',sans-serif; font-size:34px; font-weight:600;
     color:var(--rose-deep); line-height:1; font-variant-numeric:tabular-nums;
   }
   .ov-stat .os-label{ font-size:12px; color:var(--ink-soft); margin-top:6px; font-weight:500; }
@@ -859,6 +930,12 @@
     background:var(--gold-soft); color:var(--gold-deep);
     display:flex; align-items:center; justify-content:center;
   }
+
+  /* segment control (בורר תקופה בגרף) */
+  .ov-seg{ display:inline-flex; background:var(--bg-a); border:1px solid var(--line); border-radius:11px; padding:3px; gap:2px; flex-shrink:0; }
+  .ov-seg button{ border:none; background:none; font:inherit; font-size:12.5px; font-weight:700; color:var(--ink-soft); padding:6px 13px; border-radius:8px; cursor:pointer; transition:background .12s, color .12s; }
+  .ov-seg button:hover{ color:var(--rose-deep); }
+  .ov-seg button.on{ background:var(--panel); color:var(--rose-deep); box-shadow:var(--shadow-sm); }
 
   /* bar chart (leads over time / service) */
   .bars{ display:flex; align-items:stretch; gap:10px; height:150px; padding-top:18px; }
@@ -895,7 +972,7 @@
     background:var(--panel);
   }
   .donut .donut-center{ position:relative; z-index:1; text-align:center; }
-  .donut .dc-num{ font-family:'Frank Ruhl Libre',serif; font-size:24px; font-weight:600; color:var(--ink); line-height:1; }
+  .donut .dc-num{ font-family:'Manrope',sans-serif; font-size:24px; font-weight:600; color:var(--ink); line-height:1; }
   .donut .dc-lbl{ font-size:10px; color:var(--ink-faint); }
   .donut-legend{ display:flex; flex-direction:column; gap:9px; flex:1; min-width:130px; }
   .dl-item{ display:flex; align-items:center; gap:9px; font-size:12.5px; }
@@ -1096,53 +1173,52 @@
 
     <!-- ---------- LEADS VIEW ---------- -->
     <section class="view" id="view-leads">
-      <div class="page-head">
+      <div class="rhead">
         <div style="display:flex; align-items:center; gap:14px;">
           <button class="menu-toggle" id="menuToggle" aria-label="תפריט">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
           </button>
           <div>
-            <span class="ph-eyebrow">ניהול לידים</span>
-            <h1>לוח הלידים</h1>
-            <p class="ph-sub">מחובר ל-Supabase · הנתונים נשמרים אוטומטית</p>
+            <h1>לידים</h1>
+            <div class="rsub">ניהול ומעקב אחר הלקוחות שלך</div>
+            <span class="rcnt"><span class="num" id="leadsTotalCnt">0</span> סה״כ לידים</span>
           </div>
         </div>
-        <button class="btn btn-primary" id="addLeadBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          הוספת ליד ידני
-        </button>
-      </div>
-
-      <div class="kpi-row" id="kpiRow"></div>
-
-      <div class="followup-banner" id="followupBanner"></div>
-
-      <div class="toolbar">
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="חיפוש לפי שם לקוחה...">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#8A7570" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="#8A7570" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
-        <select class="filter-select" id="statusFilter"><option value="all">כל הסטטוסים</option></select>
-        <select class="filter-select" id="sourceFilter"><option value="all">כל המקורות</option></select>
-        <button class="bride-filter-btn" id="brideFilterBtn"><span>👑</span> כלות</button>
-        <div class="toolbar-push">
-          <span class="hint-text">💡 גררי כותרת עמודה לשינוי הסדר</span>
-          <span class="result-note" id="resultNote"></span>
+        <div class="rhead-actions">
+          <button class="rbtn rbtn-ghost" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>ייצוא</button>
+          <button class="rbtn rbtn-ghost" id="refreshBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>רענון</button>
+          <button class="rbtn rbtn-pri" id="addLeadBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>ליד חדש</button>
         </div>
       </div>
 
-      <div class="table-shell">
-        <table>
-          <thead><tr id="headRow"></tr></thead>
+      <div class="rkpis" id="kpiRow"></div>
+
+      <div class="rtoolbar">
+        <div class="rsearch">
+          <input type="text" id="searchInput" placeholder="חיפוש לפי שם או טלפון...">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <label class="rpill" id="pillStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg><select id="statusFilter"><option value="all">כל הסטטוסים</option></select></label>
+        <label class="rpill" id="pillSource"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg><select id="sourceFilter"><option value="all">כל המקורות</option></select></label>
+        <button class="rpill" id="brideFilterBtn">👑 כלות</button>
+        <button class="rclearf" id="clearFiltersBtn" style="display:none">ניקוי סינון ✕</button>
+        <span class="result-note" id="resultNote" style="margin-inline-start:auto"></span>
+      </div>
+
+      <div class="rtable-card">
+        <table class="rtable">
+          <thead><tr>
+            <th>לקוחה</th><th>טלפון</th><th>מקור</th><th>סטטוס</th><th>פעילות אחרונה</th><th style="text-align:left">פעולות</th>
+          </tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
-      </div>
-      <div class="empty-state" id="emptyState" style="display:none">
-        <strong>לא נמצאו לידים</strong>
-        לא נמצאה התאמה לחיפוש או לסינון שבחרת
+        <div class="empty-state" id="emptyState" style="display:none">
+          <strong>לא נמצאו לידים</strong>
+          לא נמצאה התאמה לחיפוש או לסינון שבחרת
+        </div>
       </div>
 
-      <footer class="note">מחובר לבסיס הנתונים · כל שינוי נשמר מיד</footer>
+      <div class="rpager" id="pager"></div>
     </section>
 
     <!-- ---------- TODAY VIEW ---------- -->
@@ -1363,7 +1439,7 @@
 const STATUSES = [
   { id:'new',      label:'ליד חדש',   cls:'status-new',      dot:'#E0A365' },
   { id:'noanswer', label:'לא ענתה',   cls:'status-noanswer', dot:'#D68894' },
-  { id:'followup', label:'פולו אפ',    cls:'status-followup', dot:'#DCB865' },
+  { id:'followup', label:'ליד חם',    cls:'status-followup', dot:'#C0416F' },
   { id:'closed',   label:'סגרה',      cls:'status-closed',   dot:'#7FAA8C' },
   { id:'lost',     label:'לא רלוונטי', cls:'status-lost',     dot:'#B0A29C' },
 ];
@@ -1515,38 +1591,27 @@ MANUAL_SOURCES.forEach(src => { const o=document.createElement('option'); o.valu
    KPI + BANNER
 ========================================================= */
 function renderKPIs(){
-  const row = $('kpiRow'); row.innerHTML='';
-  STATUSES.forEach(s => {
-    const n = leads.filter(l => l.status===s.id).length;
-    const el = document.createElement('div');
-    el.className = 'kpi' + ($('statusFilter').value===s.id ? ' active':'');
-    el.innerHTML = `<div class="kpi-top"><span class="kdot" style="background:${s.dot}"></span><span class="klabel">${s.label}</span></div><div class="knum">${n}</div>`;
-    el.addEventListener('click', () => {
-      $('statusFilter').value = ($('statusFilter').value===s.id) ? 'all' : s.id;
-      render();
-    });
-    row.appendChild(el);
-  });
-  $('navTotal').textContent = leads.length;
-  $('navToday').textContent = leads.filter(isTodayLead).length;
+  const row = $('kpiRow'); if(!row) return;
+  const c = s => leads.filter(l => l.status===s).length;
+  const today = leads.filter(l => l.created_at && (Date.now()-new Date(l.created_at).getTime())<864e5).length;
+  const cards = [
+    { t:'סה״כ לידים',    n:leads.length,        f:c('new')+' ממתינים לטיפול', ic:'👥', bg:'var(--rose-pale)' },
+    { t:'נכנסו היום',     n:today,               f:'ב-24 שעות',              ic:'✨', bg:'#FFF3D9' },
+    { t:'ממתינים למענה',  n:c('noanswer')+c('followup'), f:'דורשים טיפול',    ic:'⏳', bg:'#FCE4EE' },
+    { t:'נסגרו',          n:c('closed'),         f:'לקוחות סגרו',            ic:'✓', bg:'#E3F5E9' },
+  ];
+  row.innerHTML = cards.map(k => `<div class="rkpi"><div class="rkt"><span class="rki" style="background:${k.bg}">${k.ic}</span>${k.t}</div><div class="rkn">${k.n}</div><div class="rkf">${k.f}</div></div>`).join('');
+  if($('leadsTotalCnt')) $('leadsTotalCnt').textContent = leads.length;
+  if($('navTotal')) $('navTotal').textContent = leads.length;
+  if($('navToday')) $('navToday').textContent = leads.filter(isTodayLead).length;
 }
 
-function renderFollowupBanner(){
-  const todays = leads.filter(isTodayLead);
-  const b = $('followupBanner');
-  b.classList.toggle('active', showOnlyTodayFollowups);
-  b.innerHTML = `
-    <div class="fb-icon">📞</div>
-    <div><span class="fb-num">${todays.length}</span> <span class="fb-text">לידים לחזרה היום</span></div>
-    <div class="fb-sub">${showOnlyTodayFollowups ? 'לחצי כדי להציג הכל' : 'לחצי כדי לסנן רק אותם'}
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-    </div>`;
-}
-$('followupBanner').addEventListener('click', () => { showOnlyTodayFollowups = !showOnlyTodayFollowups; render(); });
+// הבאנר הישן הוסר בעיצוב החדש — נשמר כפונקציה ריקה לתאימות עם קריאות קיימות
+function renderFollowupBanner(){}
 $('brideFilterBtn').addEventListener('click', () => {
   showOnlyBrides = !showOnlyBrides;
   $('brideFilterBtn').classList.toggle('active', showOnlyBrides);
-  render();
+  leadsPage = 1; render();
 });
 
 /* =========================================================
@@ -1620,44 +1685,76 @@ function applySort(arr){
   });
 }
 
+let leadsPage = 1; const LEADS_PER_PAGE = 10;
+function relTimeShort(ts){
+  if(!ts) return '—';
+  const m=(Date.now()-new Date(ts).getTime())/60000;
+  if(m<1) return 'עכשיו'; if(m<60) return 'לפני '+Math.round(m)+' דק׳';
+  const h=m/60; if(h<24) return 'לפני '+Math.round(h)+' שעות';
+  const d=Math.round(h/24); return d===1?'אתמול':'לפני '+d+' ימים';
+}
+const waHrefDigits = p => { const d=(p||'').replace(/\D/g,''); return d.startsWith('972')?d:(d.startsWith('0')?'972'+d.slice(1):(d?'972'+d:'')); };
+
 function render(){
   const q = $('searchInput').value.trim().toLowerCase();
   const statusVal = $('statusFilter').value;
   const sourceVal = $('sourceFilter').value;
   const filtered = leads.filter(l => {
-    const ms = !q || l.name.toLowerCase().includes(q) || l.phone.includes(q);
+    const ms = !q || l.name.toLowerCase().includes(q) || (l.phone||'').includes(q);
     const mst = statusVal==='all' || l.status===statusVal;
     const msrc = sourceVal==='all' || l.source===sourceVal;
     const mf = !showOnlyTodayFollowups || isTodayLead(l);
     const mb = !showOnlyBrides || l.is_bride;
     return ms && mst && msrc && mf && mb;
   });
+  const sorted = applySort(filtered);
 
-  renderHead();
+  // pills + clear filters
+  const anyF = q || statusVal!=='all' || sourceVal!=='all' || showOnlyBrides || showOnlyTodayFollowups;
+  if($('clearFiltersBtn')) $('clearFiltersBtn').style.display = anyF ? '' : 'none';
+  if($('pillStatus')) $('pillStatus').classList.toggle('active', statusVal!=='all');
+  if($('pillSource')) $('pillSource').classList.toggle('active', sourceVal!=='all');
+
+  // pagination
+  const pages = Math.max(1, Math.ceil(sorted.length/LEADS_PER_PAGE));
+  if(leadsPage>pages) leadsPage=pages;
+  const slice = sorted.slice((leadsPage-1)*LEADS_PER_PAGE, leadsPage*LEADS_PER_PAGE);
+
   const body = $('tableBody'); body.innerHTML='';
-  applySort(filtered).forEach(l => {
+  slice.forEach(l => {
+    const s = statusById(l.status);
+    const stale = l.created_at && (Date.now()-new Date(l.created_at).getTime()) > 2*864e5;
     const tr = document.createElement('tr');
     tr.dataset.id = l.id;
     if(newLeadIds.has(l.id)) tr.classList.add('row-new');
-    columnOrder.forEach(key => {
-      const td = document.createElement('td');
-      const cls = cellClass(key); if(cls) td.className=cls;
-      td.innerHTML = cellContent(l, key);
-      tr.appendChild(td);
-    });
-    tr.addEventListener('click', e => {
-      if(e.target.closest('.status-chip')) return;
-      openDrawer(l.id);
-    });
+    tr.innerHTML = `
+      <td><div class="rcust"><span class="rav${l.is_bride?' bride':''}">${esc(initials(l.name))}</span><div style="min-width:0"><div class="rnm">${esc(l.name||'ללא שם')}${l.is_bride?'<span class="bride-badge">👑</span>':''}</div><div class="rmeta">נכנס ${relTimeShort(l.created_at)}</div></div></div></td>
+      <td><span class="rphone">${esc(fmtPhone(l.phone))}</span></td>
+      <td><span class="source-tag ${sourceClass(l.source)}"><span class="sdot"></span>${esc(l.source)}</span></td>
+      <td><span class="rbadge ${s.cls}"><span class="rdot"></span>${s.label}</span></td>
+      <td><span class="ract ${stale?'stale':''}">${stale?'⚠ ':''}${relTimeShort(l.created_at)}</span></td>
+      <td><div class="row-actions">
+        <button class="riact wa" title="וואטסאפ" data-wa="${l.id}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3z"/></svg></button>
+        <button class="riact" title="פתיחה" data-open="${l.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div></td>`;
+    tr.addEventListener('click', e => { if(e.target.closest('.riact')) return; openDrawer(l.id); });
     body.appendChild(tr);
   });
+  body.querySelectorAll('[data-wa]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const wa=waHrefDigits((leads.find(x=>x.id===b.dataset.wa)||{}).phone); if(wa) window.open('https://wa.me/'+wa,'_blank'); }));
+  body.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openDrawer(b.dataset.open); }));
 
-  $('emptyState').style.display = filtered.length ? 'none' : 'block';
-  $('resultNote').textContent = `מציג ${filtered.length} מתוך ${leads.length} לידים`;
+  $('emptyState').style.display = sorted.length ? 'none' : 'block';
+  if($('resultNote')) $('resultNote').textContent = `${sorted.length} לידים`;
+
+  const pager = $('pager');
+  if(pager){
+    pager.innerHTML = sorted.length ? `<span class="rpinfo">מציג <b class="num">${slice.length}</b> מתוך <b class="num">${sorted.length}</b></span>
+      <div class="rppages"><button class="rpg" ${leadsPage<=1?'disabled':''} data-pg="${leadsPage-1}">›</button>
+      ${Array.from({length:pages},(_,i)=>`<button class="rpg ${i+1===leadsPage?'on':''} num" data-pg="${i+1}">${i+1}</button>`).join('')}
+      <button class="rpg" ${leadsPage>=pages?'disabled':''} data-pg="${leadsPage+1}">‹</button></div>` : '';
+    pager.querySelectorAll('[data-pg]').forEach(b => b.addEventListener('click', () => { leadsPage=Number(b.dataset.pg); render(); }));
+  }
   renderKPIs();
-  renderFollowupBanner();
-
-  document.querySelectorAll('#tableBody .status-chip').forEach(btn => btn.addEventListener('click', onStatusChipClick));
 }
 
 /* =========================================================
@@ -2151,18 +2248,13 @@ function renderOverview(){
     stat(convRate+'%', 'אחוז סגירה', `<span class="os-foot">${closed} לקוחות סגרו</span>`, iconCheck) +
     stat(followWeek, 'לחזרה השבוע', `<span class="os-foot">${leads.filter(isTodayLead).length} מהן היום</span>`, iconPhone);
 
-  // ---- leads over time (8 weeks) ----
-  const weeks = 8, buckets = new Array(weeks).fill(0);
-  leads.forEach(l => { if(!l.created_at) return; const idx = weeks-1-Math.floor((nowMs-new Date(l.created_at).getTime())/wk); if(idx>=0&&idx<weeks) buckets[idx]++; });
-  const maxB = Math.max(1, ...buckets);
-  const barsHtml = buckets.map((v,i) => {
-    const d = new Date(nowMs-(weeks-1-i)*wk);
-    const xl = `${d.getDate()}.${d.getMonth()+1}`;
-    return `<div class="bar-col"><div class="bar-track"><div class="bar-fill" style="height:${Math.round(v/maxB*100)}%">${v?`<span class="bar-val">${v}</span>`:''}</div></div><div class="bar-x">${xl}</div></div>`;
-  }).join('');
+  // ---- leads over time (בורר תקופה: יומי/שבועי/חודשי) ----
   const overTime = `<div class="ov-card span8">
-    <p class="ov-ctitle">📈 לידים לאורך זמן</p><p class="ov-csub">8 השבועות האחרונים</p>
-    <div class="bars">${barsHtml}</div></div>`;
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+      <div><p class="ov-ctitle">📈 לידים לאורך זמן</p><p class="ov-csub" id="ovBarsSub"></p></div>
+      <div class="ov-seg" id="ovSeg"><button data-p="day">יומי</button><button data-p="week">שבועי</button><button data-p="month">חודשי</button></div>
+    </div>
+    <div class="bars" id="ovBarsBox"></div></div>`;
 
   // ---- sources donut ----
   const srcMap = {};
@@ -2235,6 +2327,8 @@ function renderOverview(){
   </div>`;
 
   grid.innerHTML = tiles + overTime + sources + funnel + services + bride + agenda;
+  renderOvBars();
+  document.querySelectorAll('#ovSeg button').forEach(b => b.addEventListener('click', () => { ovPeriod = b.dataset.p; renderOvBars(); }));
   grid.querySelectorAll('.ag-row').forEach(r => r.addEventListener('click', () => openDrawer(r.dataset.id)));
   const bf = $('ovBrideFilter');
   if(bf) bf.addEventListener('click', () => {
@@ -2243,6 +2337,33 @@ function renderOverview(){
     document.querySelector('[data-view="leads"]').click();
     render();
   });
+}
+
+// גרף לידים לאורך זמן — חישוב אמיתי מהנתונים לפי תקופה
+let ovPeriod = 'week';
+function ovBuckets(period){
+  const now = Date.now();
+  const build = (n, stepMs, labelFn, subTxt) => {
+    const b = new Array(n).fill(0), lbl = [];
+    for(let i=0;i<n;i++) lbl.push(labelFn(new Date(now-(n-1-i)*stepMs)));
+    leads.forEach(l => { if(!l.created_at) return; const idx = n-1-Math.floor((now-new Date(l.created_at).getTime())/stepMs); if(idx>=0&&idx<n) b[idx]++; });
+    return { b, lbl, sub: subTxt };
+  };
+  if(period==='day')  return build(14, 864e5, d => `${d.getDate()}.${d.getMonth()+1}`, '14 הימים האחרונים');
+  if(period==='month'){
+    const n=6, b=new Array(n).fill(0), lbl=[], keys=[], base=new Date();
+    for(let i=0;i<n;i++){ const d=new Date(base.getFullYear(), base.getMonth()-(n-1-i), 1); lbl.push(d.toLocaleDateString('he-IL',{month:'short'})); keys.push(d.getFullYear()+'-'+d.getMonth()); }
+    leads.forEach(l => { if(!l.created_at) return; const d=new Date(l.created_at); const idx=keys.indexOf(d.getFullYear()+'-'+d.getMonth()); if(idx>=0) b[idx]++; });
+    return { b, lbl, sub:'6 החודשים האחרונים' };
+  }
+  return build(8, 7*864e5, d => `${d.getDate()}.${d.getMonth()+1}`, '8 השבועות האחרונים');
+}
+function renderOvBars(){
+  const box = $('ovBarsBox'); if(!box) return;
+  const { b, lbl, sub } = ovBuckets(ovPeriod), maxB = Math.max(1, ...b);
+  box.innerHTML = b.map((v,i) => `<div class="bar-col"><div class="bar-track"><div class="bar-fill" style="height:${Math.round(v/maxB*100)}%">${v?`<span class="bar-val">${v}</span>`:''}</div></div><div class="bar-x">${lbl[i]}</div></div>`).join('');
+  if($('ovBarsSub')) $('ovBarsSub').textContent = sub;
+  document.querySelectorAll('#ovSeg button').forEach(x => x.classList.toggle('on', x.dataset.p===ovPeriod));
 }
 
 /* =========================================================
@@ -2490,9 +2611,27 @@ $('loginBtn').addEventListener('click', doLogin);
 $('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 $('logoutBtn').addEventListener('click', async () => { localStorage.removeItem('aya-gtoken'); await sb.auth.signOut(); location.reload(); });
 
-$('searchInput').addEventListener('input', render);
-$('statusFilter').addEventListener('change', render);
-$('sourceFilter').addEventListener('change', render);
+$('searchInput').addEventListener('input', () => { leadsPage=1; render(); });
+$('statusFilter').addEventListener('change', () => { leadsPage=1; render(); });
+$('sourceFilter').addEventListener('change', () => { leadsPage=1; render(); });
+$('clearFiltersBtn').addEventListener('click', () => {
+  $('searchInput').value=''; $('statusFilter').value='all'; $('sourceFilter').value='all';
+  showOnlyBrides=false; showOnlyTodayFollowups=false;
+  $('brideFilterBtn').classList.remove('active');
+  leadsPage=1; render();
+});
+$('refreshBtn').addEventListener('click', async () => { await loadLeads(); leadsPage=1; render(); toast('הנתונים רועננו'); });
+$('exportBtn').addEventListener('click', exportLeadsCSV);
+function exportLeadsCSV(){
+  const cols = [['שם','name'],['טלפון','phone'],['מקור','source'],['סטטוס',l=>statusById(l.status).label],['תאריך אירוע','event'],['שירות','service'],['כלה',l=>l.is_bride?'כן':''],['מחיר',l=>l.price??''],['מקדמה',l=>l.deposit??''],['הערות','note']];
+  const esc2 = v => '"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows = [cols.map(c=>esc2(c[0])).join(',')];
+  leads.forEach(l => rows.push(cols.map(c=>esc2(typeof c[1]==='function'?c[1](l):l[c[1]])).join(',')));
+  const blob = new Blob(['﻿'+rows.join('\r\n')], { type:'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='leads-'+todayISO+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  toast('הלידים יוצאו לאקסל 📥');
+}
 document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeDrawer(); closeModal(); closePopover(); } });
 
 // אם כבר מחוברת — נכנסים ישר; אחרת מסך התחברות
