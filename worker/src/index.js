@@ -15,7 +15,7 @@ import * as db from './db.js';
 import { fill } from './extract.js';
 
 const QR_FILE = './qr.png';
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;   // הענן מקצה פורט דרך PORT
 let state = 'starting';   // starting | qr | ready
 
 const client = new Client({
@@ -24,6 +24,8 @@ const client = new Client({
   }),
   puppeteer: {
     headless: true,
+    // בענן משתמשים ב-Chromium המותקן במערכת (דרך משתנה סביבה); מקומית — ברירת המחדל של puppeteer
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
   },
 });

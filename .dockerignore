@@ -1,0 +1,14 @@
+**/node_modules
+**/.wwebjs_auth
+**/.wwebjs_cache
+**/.env
+**/qr.png
+_preview_leads.html
+_redesign-preview.html
+_prod-integrated.html
+_prod-mock.html
+leads-app.html
+index.html
+.git
+docs
+db
