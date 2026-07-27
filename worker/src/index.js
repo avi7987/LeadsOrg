@@ -10,7 +10,7 @@ import pkg from 'whatsapp-web.js';
 const { Client, LocalAuth } = pkg;
 import qrcode from 'qrcode-terminal';
 import QRCode from 'qrcode';
-import { handleIncoming } from './logic.js';
+import { handleIncoming, normPhone } from './logic.js';
 import * as db from './db.js';
 import { fill } from './extract.js';
 import { startAutomations } from './automations.js';
@@ -80,7 +80,7 @@ async function handleTestPopup(cmd) {
     await db.supabase.from('commands').update({ status: 'error', result: 'מספר לא תקין' }).eq('id', cmd.id);
     return;
   }
-  const waNum = digits.startsWith('972') ? digits : '972' + digits.replace(/^0/, '');
+  const waNum = normPhone(digits);   // פורמט קנוני — זהה לשאר המערכת
   const chatId = waNum + '@c.us';
   try {
     const cfg = await db.getConfig();

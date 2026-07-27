@@ -775,7 +775,7 @@
   .rclearf:hover{ background:var(--rose-pale); }
 
   .rtable-card{ background:var(--panel); border-radius:24px; box-shadow:0 12px 40px rgba(0,0,0,.05); padding:8px; overflow-x:auto; }
-  table.rtable{ width:100%; min-width:820px; border-collapse:collapse; }
+  table.rtable{ width:100%; min-width:980px; border-collapse:collapse; }
   .rtable thead th{ text-align:right; font-size:13px; font-weight:700; color:var(--ink-soft); padding:16px 20px; white-space:nowrap; background:none; border:none; position:static; }
   .rtable thead th:first-child{ padding-inline-start:22px; }
   .rtable tbody tr{ cursor:pointer; transition:background .12s; }
@@ -791,6 +791,17 @@
   .rphone{ direction:ltr; text-align:right; font-weight:500; font-variant-numeric:tabular-nums; }
   .rbadge{ display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:700; white-space:nowrap; }
   .rbadge .rdot{ width:6px;height:6px;border-radius:999px; }
+  /* תא האוטומציות — מה הבא בתור + מה כבר נשלח */
+  .autos{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .auto-next{ display:inline-flex; align-items:center; gap:5px; white-space:nowrap; font-size:12.5px; font-weight:700;
+    padding:5px 11px; border-radius:999px; background:var(--rose-pale); color:var(--rose-deep); cursor:default; }
+  .auto-next.soon{ background:#FFF3D9; color:#8A6A1E; }
+  .auto-next.over{ background:#FCE4EE; color:#C0416F; }
+  .auto-sent{ position:relative; display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:8px; background:var(--wa-soft); font-size:13px; cursor:default; }
+  .auto-sent .auto-v{ position:absolute; bottom:-2px; left:-2px; font-size:9px; color:var(--wa); font-weight:800;
+    background:var(--panel); border-radius:50%; width:12px; height:12px; display:flex; align-items:center; justify-content:center; }
+  .auto-none{ color:var(--ink-faint); }
   .ract{ color:var(--ink-soft); font-size:13.5px; font-weight:500; white-space:nowrap; }
   .ract.stale{ color:#C0416F; font-weight:700; }
   .row-actions{ display:flex; gap:7px; justify-content:flex-start; opacity:0; transform:translateX(6px); transition:opacity .14s, transform .14s; }
@@ -1268,7 +1279,7 @@
       <div class="rtable-card">
         <table class="rtable">
           <thead><tr>
-            <th>לקוחה</th><th>טלפון</th><th>מקור</th><th>סטטוס</th><th>פעילות אחרונה</th><th style="text-align:left">פעולות</th>
+            <th>לקוחה</th><th>טלפון</th><th>מקור</th><th>סטטוס</th><th>אוטומציות</th><th>פעילות אחרונה</th><th style="text-align:left">פעולות</th>
           </tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
@@ -1560,6 +1571,8 @@
             <div><h3>בדיקת פופ-אפ חי</h3></div>
           </div>
           <p class="card-desc">המערכת תתחיל איתך שיחה בוואטסאפ בדיוק כמו עם לקוחה חדשה — <b>כל שאלה תגיע רק אחרי שתעני על הקודמת</b>. הזיני מספר <b>שונה מהמספר המחובר</b>.</p>
+          <div class="smart-note">✅ <b>הבדיקה עוקפת את כל הקריטריונים</b> — אפשר לשלוח גם למספר ששמור באנשי הקשר שלך ושיש איתו התכתבות מהעבר (למשל של בעלך). זה יעבוד תמיד.</div>
+          <p class="card-desc" style="display:none"></p>
           <div class="field"><label>מספר לבדיקה</label><input type="text" id="testPhone" placeholder="050-0000000"></div>
           <button class="btn btn-wa btn-block" id="testSendBtn">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg>
@@ -1764,6 +1777,8 @@ function mapLead(r){
     followup: fmtDate(r.followup_date),
     followup_message: r.followup_message || '',
     followup_sent_at: r.followup_sent_at || null,
+    event_reminder_sent_at: r.event_reminder_sent_at || null,
+    post_event_sent_at: r.post_event_sent_at || null,
     created: fmtDate(r.created_at),
     created_at: r.created_at || null,   // גלם — למיון וגרפים
     wa_chat_id: r.wa_chat_id || null,
@@ -1920,6 +1935,84 @@ function applySort(arr){
   });
 }
 
+/* =========================================================
+   מצב האוטומציות לכל ליד — מה נשלח ומה הבא בתור
+========================================================= */
+let sessionsByPhone = {};   // שיחות פופ-אפ פעילות (phone → session)
+async function loadSessions(){
+  const { data } = await sb.from('popup_sessions').select('phone,step,answers,started_at,nudged_at');
+  sessionsByPhone = {};
+  (data||[]).forEach(s => { sessionsByPhone[normPhone(s.phone) || s.phone] = s; });
+}
+
+// "בעוד X" / "עבר המועד" בעברית קריאה
+function untilText(ms){
+  if(ms <= 0) return { txt:'עבר המועד', over:true };
+  const h = ms/36e5;
+  if(h < 1)  return { txt:'בעוד ' + Math.max(1, Math.round(ms/6e4)) + ' דק׳', soon:true };
+  if(h < 24) return { txt:'בעוד ' + Math.round(h) + ' שעות', soon:true };
+  const d = Math.round(h/24);
+  if(d === 1) return { txt:'מחר' , soon:true };
+  return { txt:'בעוד ' + d + ' ימים' };
+}
+
+const AUTO_META = {
+  nudge:  { ic:'🔔', name:'תזכורת "לא סיימה"' },
+  follow: { ic:'📨', name:'הודעת המשך' },
+  event:  { ic:'🗓️', name:'תזכורת יום לפני האירוע' },
+  post:   { ic:'👑', name:'הודעת "יום אחרי" (כלות)' },
+};
+
+// מחזיר: מה כבר נשלח, ומה האוטומציה הבאה + מתי
+function automationState(l){
+  const sent = [];
+  if(l.followup_sent_at)       sent.push({ k:'follow', at:l.followup_sent_at });
+  if(l.event_reminder_sent_at) sent.push({ k:'event',  at:l.event_reminder_sent_at });
+  if(l.post_event_sent_at)     sent.push({ k:'post',   at:l.post_event_sent_at });
+
+  const now = Date.now();
+  const pending = [];
+  const sess = sessionsByPhone[l.phone];
+
+  // 1. שיחת פופ-אפ שלא הושלמה → תזכורת נטישה
+  if(sess && !(sess.answers && sess.answers.__test)){
+    if(sess.nudged_at){
+      sent.push({ k:'nudge', at:sess.nudged_at });
+    } else if(setVal('abandon_enabled') !== false){
+      const last = new Date((sess.answers && sess.answers.__last) || sess.started_at).getTime();
+      pending.push({ k:'nudge', due: last + Number(setVal('abandon_hours'))*36e5 });
+    }
+  }
+  // 2. הודעת המשך
+  if(l.followup_date && !l.followup_sent_at && ['new','noanswer','followup'].includes(l.status) && setVal('followup_enabled') !== false){
+    pending.push({ k:'follow', due: new Date(l.followup_date).setHours(9,0,0,0) });
+  }
+  // 3+4. תזכורות סביב האירוע (רק למי שסגרה)
+  if(l.status === 'closed' && l.event && l.event !== '—'){
+    const ev = parseEventToDate(l.event);
+    if(ev){
+      if(!l.event_reminder_sent_at && setVal('event_reminder_enabled') !== false)
+        pending.push({ k:'event', due: ev.getTime() - 864e5 + 9*36e5 });
+      if(l.is_bride && !l.post_event_sent_at && setVal('post_event_enabled') !== false)
+        pending.push({ k:'post', due: ev.getTime() + Number(setVal('post_event_hours'))*36e5 });
+    }
+  }
+  pending.sort((a,b) => a.due - b.due);
+  const next = pending[0] ? { ...pending[0], ...untilText(pending[0].due - now) } : null;
+  return { sent, next };
+}
+
+// תא הטבלה — קומפקטי: מה הבא בתור + סימוני מה שנשלח
+function automationCell(l){
+  const { sent, next } = automationState(l);
+  const sentHtml = sent.map(s =>
+    `<span class="auto-sent" title="${esc(AUTO_META[s.k].name)} · נשלחה ${esc(fmtDate(s.at))}">${AUTO_META[s.k].ic}<span class="auto-v">✓</span></span>`).join('');
+  if(!next) return `<div class="autos">${sentHtml || '<span class="auto-none">—</span>'}</div>`;
+  const m = AUTO_META[next.k];
+  const cls = next.over ? ' over' : (next.soon ? ' soon' : '');
+  return `<div class="autos"><span class="auto-next${cls}" title="${esc(m.name)}">${m.ic} ${esc(next.txt)}</span>${sentHtml}</div>`;
+}
+
 let leadsPage = 1; const LEADS_PER_PAGE = 10;
 function relTimeShort(ts){
   if(!ts) return '—';
@@ -1966,15 +2059,18 @@ function render(){
       <td><div class="rcust"><span class="rav${l.is_bride?' bride':''}">${esc(initials(l.name))}</span><div style="min-width:0"><div class="rnm">${esc(l.name||'ללא שם')}${l.is_bride?'<span class="bride-badge">👑</span>':''}</div><div class="rmeta">נכנס ${relTimeShort(l.created_at)}</div></div></div></td>
       <td><span class="rphone">${esc(fmtPhone(l.phone))}</span></td>
       <td><span class="source-tag ${sourceClass(l.source)}"><span class="sdot"></span>${esc(l.source)}</span></td>
-      <td><span class="rbadge ${s.cls}"><span class="rdot"></span>${s.label}</span></td>
+      <td><button class="status-chip ${s.cls}" data-id="${l.id}" title="לחיצה לשינוי מהיר"><span class="dot"></span>${s.label}</button></td>
+      <td>${automationCell(l)}</td>
       <td><span class="ract ${stale?'stale':''}">${stale?'⚠ ':''}${relTimeShort(l.created_at)}</span></td>
       <td><div class="row-actions">
         <button class="riact wa" title="וואטסאפ" data-wa="${l.id}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3z"/></svg></button>
         <button class="riact" title="פתיחה" data-open="${l.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button>
       </div></td>`;
-    tr.addEventListener('click', e => { if(e.target.closest('.riact')) return; openDrawer(l.id); });
+    tr.addEventListener('click', e => { if(e.target.closest('.riact') || e.target.closest('.status-chip')) return; openDrawer(l.id); });
     body.appendChild(tr);
   });
+  // שינוי סטטוס מהיר — חלון קטן שנפתח בלחיצה על הסטטוס
+  body.querySelectorAll('.status-chip').forEach(btn => btn.addEventListener('click', onStatusChipClick));
   body.querySelectorAll('[data-wa]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); const wa=waHrefDigits((leads.find(x=>x.id===b.dataset.wa)||{}).phone); if(wa) window.open('https://wa.me/'+wa,'_blank'); }));
   body.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openDrawer(b.dataset.open); }));
 
@@ -2736,7 +2832,7 @@ function setupRealtime(){
 }
 async function onLeadChange(payload){
   const isInsert = payload.eventType === 'INSERT';
-  await loadLeads();
+  await Promise.all([loadLeads(), loadSessions()]);
   if(isInsert && payload.new){
     newLeadIds.add(payload.new.id);
     setTimeout(() => { newLeadIds.delete(payload.new.id); }, 3000);
@@ -2949,7 +3045,7 @@ async function dbDeleteLead(id){ const { error } = await sb.from('leads').delete
 ========================================================= */
 async function boot(){
   showSkeleton();
-  await Promise.all([loadLeads(), loadKeywords(), loadSettings()]);
+  await Promise.all([loadLeads(), loadKeywords(), loadSettings(), loadSessions()]);
   render();
   renderOverview();
   setupRealtime();
@@ -3003,7 +3099,7 @@ $('clearFiltersBtn').addEventListener('click', () => {
   $('brideFilterBtn').classList.remove('active');
   leadsPage=1; render();
 });
-$('refreshBtn').addEventListener('click', async () => { await loadLeads(); leadsPage=1; render(); toast('הנתונים רועננו'); });
+$('refreshBtn').addEventListener('click', async () => { await Promise.all([loadLeads(), loadSessions()]); leadsPage=1; render(); toast('הנתונים רועננו'); });
 $('exportBtn').addEventListener('click', exportLeadsCSV);
 function exportLeadsCSV(){
   const cols = [['שם','name'],['טלפון','phone'],['מקור','source'],['סטטוס',l=>statusById(l.status).label],['תאריך אירוע','event'],['שירות','service'],['כלה',l=>l.is_bride?'כן':''],['מחיר',l=>l.price??''],['מקדמה',l=>l.deposit??''],['הערות','note']];
