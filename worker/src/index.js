@@ -176,5 +176,18 @@ function page() {
   </script></body></html>`;
 }
 
+// ── דיווח שגיאות ברור (במיוחד בענן — כדי לדעת מה בדיוק נפל) ──
+process.on('unhandledRejection', (err) => {
+  console.error('❌ שגיאה לא מטופלת:', (err && err.stack) || err);
+});
+process.on('uncaughtException', (err) => {
+  console.error('❌ חריגה לא מטופלת:', (err && err.stack) || err);
+});
+
 console.log('⏳ מאתחל חיבור לוואטסאפ...');
-client.initialize();
+console.log(`   סביבה: node ${process.version} · PORT=${PORT} · Chromium=${process.env.PUPPETEER_EXECUTABLE_PATH || '(ברירת מחדל)'} · session=${process.env.WA_SESSION_PATH || './.wwebjs_auth'}`);
+client.initialize().catch((err) => {
+  console.error('❌ האתחול נכשל:', (err && err.stack) || err);
+  console.error('   בדקי: משתני סביבה, Chromium מותקן, וזיכרון פנוי (whatsapp-web.js דורש ~1GB).');
+  process.exit(1);
+});
