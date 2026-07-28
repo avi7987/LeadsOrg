@@ -2,7 +2,8 @@
 #  Dockerfile — ה-Worker (המוח) לאירוח בענן (Railway/Render)
 #  כולל Chromium שדרוש ל-whatsapp-web.js
 # ============================================================
-FROM node:20-slim
+# Node 22 — נדרש ע"י @supabase/supabase-js (WebSocket מובנה)
+FROM node:22-slim
 
 # Chromium + פונטים + תעודות (apt מושך אוטומטית את שאר התלויות של Chromium)
 RUN apt-get update && apt-get install -y --no-install-recommends \
