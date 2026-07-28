@@ -879,6 +879,32 @@
   .fu-box textarea:focus{ border-color:var(--rose); box-shadow:0 0 0 3px var(--rose-pale); }
   .fu-hint{ font-size:11.5px; color:var(--ink-faint); margin-top:6px; }
 
+  /* ============ WhatsApp connection status ============ */
+  .wa-chip{ display:flex; align-items:center; gap:9px; width:100%; margin-bottom:10px;
+    padding:10px 12px; border-radius:13px; border:1px solid var(--line); background:var(--panel);
+    cursor:pointer; font:inherit; font-size:12.5px; font-weight:600; color:var(--ink); text-align:right;
+    box-shadow:var(--shadow-sm); transition:border-color .15s, background .15s; }
+  .wa-chip:hover{ border-color:var(--rose); }
+  .wa-chip .wa-led{ width:9px; height:9px; border-radius:999px; flex-shrink:0; background:var(--ink-faint); }
+  .wa-chip .wa-txt{ flex:1; min-width:0; }
+  .wa-chip .wa-sub{ display:block; font-size:11px; font-weight:500; color:var(--ink-soft); margin-top:1px; }
+  .wa-chip.ok{ background:var(--wa-soft); border-color:#9ad9b8; }
+  .wa-chip.ok .wa-led{ background:var(--wa); box-shadow:0 0 0 0 rgba(37,167,104,.5); animation:rtPulse 2.4s infinite; }
+  .wa-chip.warn{ background:#FFF5D9; border-color:#E8CE84; }
+  .wa-chip.warn .wa-led{ background:#C9A227; }
+  .wa-chip.bad{ background:#FCE4EE; border-color:#EBA9C2; }
+  .wa-chip.bad .wa-led{ background:#C0416F; }
+
+  .wa-modal-card{ text-align:center; }
+  .wa-steps{ text-align:right; font-size:13.5px; color:var(--ink-soft); line-height:1.9; margin:0 auto 16px; max-width:330px; padding-inline-start:18px; }
+  .wa-steps b{ color:var(--ink); }
+  .wa-qr{ width:280px; height:280px; border-radius:16px; border:1px solid var(--line); background:#fff; display:block; margin:0 auto 14px; object-fit:contain; }
+  .wa-qr-box{ min-height:280px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; }
+  .wa-spin{ width:34px; height:34px; border:3px solid var(--line); border-top-color:var(--rose); border-radius:50%; animation:waspin .8s linear infinite; }
+  @keyframes waspin{ to{ transform:rotate(360deg); } }
+  .wa-ok-ic{ font-size:52px; }
+  .wa-note{ font-size:12.5px; color:var(--ink-faint); line-height:1.6; }
+
   /* ---- Login ---- */
   .login-scrim{
     position:fixed; inset:0; z-index:300;
@@ -1203,7 +1229,12 @@
       <span>הגדרות זיהוי</span>
     </button>
 
-    <div class="side-foot">
+    <button class="wa-chip" id="waChip" style="margin-top:auto">
+      <span class="wa-led"></span>
+      <span class="wa-txt"><span id="waChipTitle">בודק חיבור…</span><span class="wa-sub" id="waChipSub">וואטסאפ</span></span>
+    </button>
+
+    <div class="side-foot" style="margin-top:0">
       <div class="avatar">א</div>
       <div>
         <div class="sf-name">איה</div>
@@ -1660,6 +1691,23 @@
     <div class="modal-foot">
       <button class="btn btn-primary" id="addSave">שמירת ליד</button>
       <button class="btn btn-ghost" id="addCancel">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== WHATSAPP CONNECT MODAL ===================== -->
+<div class="modal" id="waModal">
+  <div class="modal-card wa-modal-card">
+    <div class="modal-head">
+      <div class="mh-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.5-3.8-3.4-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></div>
+      <div style="text-align:right">
+        <h2 id="waModalTitle">חיבור וואטסאפ</h2>
+        <span class="mh-sub" id="waModalSub">שלב אחרון — חד־פעמי</span>
+      </div>
+      <button class="icon-btn" id="waModalClose" style="margin-inline-start:auto"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="waModalBody"></div>
     </div>
   </div>
 </div>
@@ -2249,7 +2297,7 @@ function closeDrawer(){
   drawerLeadId = null;
 }
 $('drawerClose').addEventListener('click', closeDrawer);
-$('scrim').addEventListener('click', () => { closeDrawer(); closeModal(); });
+$('scrim').addEventListener('click', () => { closeDrawer(); closeModal(); closeWaModal(); });
 
 $('drawerSave').addEventListener('click', async () => {
   if(!drawerLeadId) return;
@@ -2820,6 +2868,99 @@ function renderOvBars(){
 }
 
 /* =========================================================
+   חיבור וואטסאפ — מחוון קבוע + חלון חיבור מאובטח
+   ה-QR מגיע דרך בסיס הנתונים (רק למשתמש מחובר), אין נקודת קצה ציבורית.
+========================================================= */
+let waState = null;           // { status, qr, phone, detail, updated_at }
+let waModalOpen = false;
+const WA_STALE_MS = 150000;   // אין דופק 2.5 דק' → השרת כנראה לא רץ
+
+async function loadWaStatus(){
+  const { data, error } = await sb.from('wa_status').select('*').eq('id',1).maybeSingle();
+  if(error){ waState = { status:'unknown', detail:error.message }; }
+  else waState = data || { status:'unknown' };
+  renderWaChip();
+  if(waModalOpen) renderWaModal();
+}
+
+// המצב האמיתי — כולל זיהוי שהשרת לא מגיב
+function waEffective(){
+  if(!waState || waState.status==='unknown') return 'unknown';
+  const age = waState.updated_at ? Date.now() - new Date(waState.updated_at).getTime() : Infinity;
+  if(waState.status==='ready' && age > WA_STALE_MS) return 'offline';
+  return waState.status;
+}
+
+const WA_VIEW = {
+  ready:        { cls:'ok',   t:'וואטסאפ מחובר',      s:'המערכת מאזינה ✓' },
+  qr:           { cls:'warn', t:'ממתין לחיבור',       s:'לחצי לסריקת הקוד' },
+  starting:     { cls:'warn', t:'מתחבר…',             s:'רגע אחד' },
+  disconnected: { cls:'bad',  t:'וואטסאפ מנותק',      s:'לחצי לחיבור מחדש' },
+  offline:      { cls:'bad',  t:'השירות לא מגיב',     s:'המערכת לא קולטת לידים' },
+  unknown:      { cls:'',     t:'בודק חיבור…',        s:'וואטסאפ' },
+};
+
+function renderWaChip(){
+  const chip = $('waChip'); if(!chip) return;
+  const v = WA_VIEW[waEffective()] || WA_VIEW.unknown;
+  chip.className = 'wa-chip ' + v.cls;
+  $('waChipTitle').textContent = v.t;
+  $('waChipSub').textContent = (waEffective()==='ready' && waState.phone) ? fmtPhone(waState.phone) : v.s;
+}
+
+function renderWaModal(){
+  const st = waEffective(), body = $('waModalBody');
+  if(!body) return;
+  $('waModalTitle').textContent = st==='ready' ? 'וואטסאפ מחובר' : 'חיבור וואטסאפ';
+  $('waModalSub').textContent   = st==='ready' ? 'הכול פעיל' : 'שלב אחרון — חד־פעמי';
+
+  if(st==='ready'){
+    body.innerHTML = `<div class="wa-qr-box"><div class="wa-ok-ic">✅</div>
+      <div style="font-size:16px;font-weight:700">הוואטסאפ מחובר ופעיל</div>
+      ${waState.phone?`<div class="wa-note">המספר המחובר: <b>${esc(fmtPhone(waState.phone))}</b></div>`:''}
+      <div class="wa-note">המערכת מאזינה להודעות ומזהה לידים אוטומטית.<br>אין צורך לסרוק שוב — החיבור נשמר.</div></div>`;
+    return;
+  }
+  if(st==='qr' && waState.qr){
+    body.innerHTML = `<ol class="wa-steps">
+        <li>בטלפון: פותחים <b>וואטסאפ</b></li>
+        <li><b>הגדרות</b> ← <b>מכשירים מקושרים</b></li>
+        <li>לוחצים <b>קישור מכשיר</b></li>
+        <li>סורקים את הקוד שכאן 👇</li>
+      </ol>
+      <img class="wa-qr" src="${waState.qr}" alt="קוד QR לחיבור וואטסאפ">
+      <div class="wa-note">הקוד מתחדש אוטומטית. החלון ייסגר לבד ברגע שהחיבור יצליח.</div>`;
+    return;
+  }
+  if(st==='offline'){
+    body.innerHTML = `<div class="wa-qr-box"><div class="wa-ok-ic">🔌</div>
+      <div style="font-size:16px;font-weight:700">השירות לא מגיב</div>
+      <div class="wa-note">שרת המערכת אינו פעיל כרגע, ולכן לידים חדשים <b>לא נקלטים</b>.<br>
+      יש להפעיל את השירות (Railway) — ואז החיבור יחזור אוטומטית.</div></div>`;
+    return;
+  }
+  body.innerHTML = `<div class="wa-qr-box"><div class="wa-spin"></div>
+    <div style="font-size:15px;font-weight:600">${st==='disconnected'?'מתחבר מחדש…':'מכין את קוד החיבור…'}</div>
+    <div class="wa-note">${esc((waState&&waState.detail)||'רגע אחד, זה לוקח כמה שניות')}</div></div>`;
+}
+
+function openWaModal(){
+  waModalOpen = true;
+  $('waModal').classList.add('open'); $('scrim').classList.add('open');
+  renderWaModal(); loadWaStatus();
+}
+function closeWaModal(){
+  waModalOpen = false;
+  $('waModal').classList.remove('open'); $('scrim').classList.remove('open');
+}
+$('waChip').addEventListener('click', openWaModal);
+$('waModalClose').addEventListener('click', closeWaModal);
+
+// מעקב שוטף: מהיר כשהחלון פתוח (בשביל ה-QR המתחדש), איטי ברקע
+setInterval(() => { if(waModalOpen) loadWaStatus(); }, 3000);
+setInterval(() => { if(!waModalOpen) loadWaStatus(); }, 20000);
+
+/* =========================================================
    REALTIME (עדכון חי מהworker)
 ========================================================= */
 let rtChannel = null;
@@ -2828,6 +2969,7 @@ function setupRealtime(){
   rtChannel = sb.channel('rt-dashboard')
     .on('postgres_changes', { event:'*', schema:'public', table:'leads' }, onLeadChange)
     .on('postgres_changes', { event:'INSERT', schema:'public', table:'messages' }, onNewMessage)
+    .on('postgres_changes', { event:'*', schema:'public', table:'wa_status' }, onWaStatusChange)
     .subscribe();
 }
 async function onLeadChange(payload){
@@ -2844,6 +2986,18 @@ async function onLeadChange(payload){
   if(drawerLeadId && payload.new && payload.new.id === drawerLeadId){ /* השארת הכרטיס פתוח */ }
   if(isInsert && payload.new){ const n = payload.new; toast('ליד חדש נכנס: ' + (n.name || n.phone || 'ללא שם') + ' 🎉'); }
 }
+// מצב הוואטסאפ השתנה → עדכון מיידי של המחוון, וסגירה אוטומטית כשמתחבר
+function onWaStatusChange(payload){
+  const wasReady = waEffective() === 'ready';
+  waState = payload.new || waState;
+  renderWaChip();
+  if(waModalOpen) renderWaModal();
+  if(!wasReady && waState && waState.status === 'ready'){
+    toast('הוואטסאפ חובר בהצלחה ✅');
+    if(waModalOpen) setTimeout(closeWaModal, 2500);   // רגע לראות את האישור
+  }
+}
+
 function onNewMessage(payload){
   const m = payload.new; if(!m || !drawerLeadId) return;
   const l = leads.find(x => x.id === drawerLeadId); if(!l) return;
@@ -3045,10 +3199,13 @@ async function dbDeleteLead(id){ const { error } = await sb.from('leads').delete
 ========================================================= */
 async function boot(){
   showSkeleton();
-  await Promise.all([loadLeads(), loadKeywords(), loadSettings(), loadSessions()]);
+  await Promise.all([loadLeads(), loadKeywords(), loadSettings(), loadSessions(), loadWaStatus()]);
   render();
   renderOverview();
   setupRealtime();
+  // אם הוואטסאפ עוד לא מחובר — פותחים את חלון החיבור מיד אחרי ההתחברות (חד־פעמי)
+  if(waEffective() !== 'ready') setTimeout(openWaModal, 900);
+
   // חזרה אחרי התחברות עם גוגל שנועדה להוסיף אירוע → משלימים את הפעולה אוטומטית
   const pending = localStorage.getItem('aya-pending-cal');
   if(pending && googleToken && leads.some(l => l.id===pending)){
@@ -3111,7 +3268,7 @@ function exportLeadsCSV(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   toast('הלידים יוצאו לאקסל 📥');
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeDrawer(); closeModal(); closePopover(); } });
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeDrawer(); closeModal(); closePopover(); closeWaModal(); } });
 
 // אם כבר מחוברת — נכנסים ישר; אחרת מסך התחברות
 (async () => {

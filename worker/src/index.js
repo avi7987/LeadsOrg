@@ -31,13 +31,24 @@ const client = new Client({
   },
 });
 
+// ── דיווח מצב החיבור לדשבורד (דרך בסיס הנתונים — אין נקודת קצה ציבורית) ──
+async function setWaStatus(status, extra = {}) {
+  try {
+    await db.supabase.from('wa_status').upsert({
+      id: 1, status, updated_at: new Date().toISOString(), ...extra,
+    });
+  } catch (e) { console.error('wa_status:', e.message || e); }
+}
+
 // ── QR חדש (מתחדש כל ~20 שניות עד שסורקים) ──
 client.on('qr', async (qr) => {
   state = 'qr';
-  qrcode.generate(qr, { small: true });               // גיבוי בטרמינל
-  try { await QRCode.toFile(QR_FILE, qr, { width: 420, margin: 2 }); }
-  catch (e) { console.error('qr.png:', e.message); }
-  console.log(`🌐 לקישור — פתחי בדפדפן:  http://localhost:${PORT}`);
+  qrcode.generate(qr, { small: true });               // גיבוי בטרמינל/לוג
+  try {
+    const dataUri = await QRCode.toDataURL(qr, { width: 420, margin: 2 });
+    await setWaStatus('qr', { qr: dataUri, detail: 'ממתין לסריקה מהדשבורד' });
+    console.log('📲 קוד QR נשלח לדשבורד — היכנסי להגדרות → חיבור וואטסאפ');
+  } catch (e) { console.error('qr:', e.message); }
 });
 
 client.on('authenticated', () => console.log('🔐 אומת בהצלחה'));
@@ -50,9 +61,23 @@ client.on('ready', async () => {
   console.log(dry
     ? '🧪 מצב בדיקה (DRY_RUN): מזהה ויוצר לידים, אך לא שולח הודעות אמת ללקוחות.'
     : '🚀 מצב חי: המערכת שולחת פופ-אפים אמיתיים ללקוחות!');
+  // מנקים את ה-QR מיד — לא נשאר קוד "תלוי" שאפשר לסרוק
+  const me = (client.info && client.info.wid && client.info.wid.user) || null;
+  await setWaStatus('ready', { qr: null, phone: me, detail: null });
+  startHeartbeat();
   startCommandPoller();
   startAutomations(client);
 });
+
+// דופק כל 30 שניות — כך הדשבורד יודע להבחין בין "מחובר" ל-"השרת נפל"
+let heartbeatStarted = false;
+function startHeartbeat() {
+  if (heartbeatStarted) return;
+  heartbeatStarted = true;
+  setInterval(() => {
+    if (state === 'ready') setWaStatus('ready');
+  }, 30000);
+}
 
 // ── בדיקות מהדשבורד: שולף "פקודות בדיקה" מ-Supabase ושולח פופ-אפ אמיתי ──
 //    (שליחה אמיתית תמיד — גם ב-DRY_RUN — כי זו בדיקה יזומה שלך)
@@ -103,11 +128,15 @@ async function handleTestPopup(cmd) {
   }
 }
 
-client.on('auth_failure', (m) => console.error('❌ כשל אימות:', m));
+client.on('auth_failure', async (m) => {
+  console.error('❌ כשל אימות:', m);
+  await setWaStatus('disconnected', { qr: null, detail: 'כשל אימות — נדרש חיבור מחדש' });
+});
 
-client.on('disconnected', (reason) => {
+client.on('disconnected', async (reason) => {
   state = 'starting';
   console.error('⚠️  נותק:', reason, '— מאתחל מחדש בעוד 3 שניות...');
+  await setWaStatus('disconnected', { qr: null, detail: 'החיבור נותק (' + reason + ') — מנסה להתחבר מחדש' });
   setTimeout(() => client.initialize().catch(e => console.error(e)), 3000);
 });
 
@@ -134,55 +163,21 @@ async function onIncoming(msg, via) {
 // (שימוש בשני אירועים גרם לעיבוד כפול — כל הודעה נשלחה פעמיים.)
 client.on('message_create', (msg) => onIncoming(msg, 'message_create'));
 
-// ── עמוד קישור מקומי (QR חי) ──
+// ── שרת בריאות בלבד — אין כאן QR ואין מידע רגיש ──
+//    (ה-QR עובר לדשבורד דרך בסיס הנתונים, מוגן בהתחברות)
 http.createServer((req, res) => {
-  const url = req.url || '/';
-  if (url.startsWith('/qr.png')) {
-    fs.readFile(QR_FILE, (e, buf) => {
-      if (e) { res.writeHead(404); res.end(); return; }
-      res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'no-store' });
-      res.end(buf);
-    });
+  if ((req.url || "/").startsWith("/health")) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ ok: true, state }));
     return;
   }
-  if (url.startsWith('/status')) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end(state);
-    return;
-  }
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-  res.end(page());
-}).listen(PORT, () => console.log(`🌐 עמוד הקישור מוכן: http://localhost:${PORT}`));
-
-function page() {
-  if (state === 'ready') {
-    return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>מחובר</title>
-<style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#E5EFE7;color:#2f5138;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center}h1{font-size:44px;margin:0 0 8px}</style>
-</head><body><div><h1>✅ מחובר!</h1><p>המערכת מאזינה. אפשר לסגור את החלון.</p></div></body></html>`;
-  }
-  return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>קישור וואטסאפ</title><style>
-    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#FBF4F3,#F5EAEC);font-family:'Segoe UI',sans-serif;color:#3B2A33}
-    .card{background:#fff;padding:26px;border-radius:22px;box-shadow:0 16px 40px -12px rgba(125,66,87,.35);text-align:center}
-    h2{color:#7D4257;margin:0 0 4px}.live{color:#4F7A5D;font-weight:600;font-size:13px}
-    img{width:330px;height:330px;border-radius:14px;display:block;margin:10px auto}
-    ol{text-align:right;color:#6b5560;font-size:13px;max-width:330px;line-height:1.7;padding-inline-start:20px;margin:6px 0 0}
-  </style></head><body><div class="card">
-    <h2>קישור וואטסאפ</h2><div class="live">● מתחדש אוטומטית — תמיד תקף</div>
-    <img id="qr" src="/qr.png" alt="QR">
-    <ol><li>בטלפון של איה: וואטסאפ ← הגדרות</li><li>מכשירים מקושרים ← קישור מכשיר</li><li>סרקי את הקוד</li></ol>
-  </div><script>
-    setInterval(()=>{document.getElementById('qr').src='/qr.png?t='+Date.now();},4000);
-    setInterval(()=>{fetch('/status').then(r=>r.text()).then(t=>{if(t==='ready')location.reload();}).catch(()=>{});},3000);
-  </script></body></html>`;
-}
-
-// ── דיווח שגיאות ברור (במיוחד בענן — כדי לדעת מה בדיוק נפל) ──
-process.on('unhandledRejection', (err) => {
-  console.error('❌ שגיאה לא מטופלת:', (err && err.stack) || err);
-});
-process.on('uncaughtException', (err) => {
-  console.error('❌ חריגה לא מטופלת:', (err && err.stack) || err);
-});
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+  res.end(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>מערכת הלידים</title>
+<style>body{margin:0;font-family:system-ui,sans-serif;background:#FFF8F7;color:#2D2D2D;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center}
+.c{background:#fff;padding:34px 40px;border-radius:22px;box-shadow:0 12px 40px rgba(0,0,0,.06)}h1{margin:0 0 8px;font-size:22px}p{margin:0;color:#7A7A7A;font-size:14px}</style>
+</head><body><div class="c"><h1>🔒 שירות מערכת הלידים</h1>
+<p>השירות פעיל. ניהול וחיבור הוואטסאפ מתבצעים מתוך הדשבורד, לאחר התחברות.</p></div></body></html>`);
+}).listen(PORT, () => console.log(`🌐 שרת בריאות מאזין על פורט ${PORT}`));
 
 console.log('⏳ מאתחל חיבור לוואטסאפ...');
 console.log(`   סביבה: node ${process.version} · PORT=${PORT} · Chromium=${process.env.PUPPETEER_EXECUTABLE_PATH || '(ברירת מחדל)'} · session=${process.env.WA_SESSION_PATH || './.wwebjs_auth'}`);
