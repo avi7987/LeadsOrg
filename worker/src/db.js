@@ -108,6 +108,9 @@ export async function getConfig() {
     keywords:       (kws || []).map(k => k.word),
     popupQuestions: s.popup_questions || [],
     popupThanks:    s.popup_thanks || 'תודה! נחזור אלייך בהקדם 💕',
+    // ניסוח מיוחד לכלות — נכנס לפעולה ברגע שמזוהה שמדובר בכלה (ריק = משתמש ברגיל)
+    popupQuestionsBride: s.popup_questions_bride || [],
+    popupThanksBride:    s.popup_thanks_bride || '',
     adPrompt:       s.ad_prompt || '',
     windowMinutes:  Number(s.window_minutes ?? 60),
     maxScreened:    Number(s.max_screened ?? 3),

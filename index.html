@@ -1472,6 +1472,25 @@
           <div class="var-chips" data-for="popupThanksText"></div>
           <button class="btn btn-ghost btn-block save-setting" data-target="popupThanksText" data-key="popup_thanks">שמירת הודעת הסיום</button>
         </div>
+
+        <!-- ניסוח מיוחד לכלות -->
+        <div class="card" style="grid-column:1/-1; background:linear-gradient(160deg,var(--gold-soft),var(--panel)); border-color:var(--gold)">
+          <div class="card-head">
+            <div class="ch-icon" style="background:linear-gradient(150deg,#F0D48A,#D9B15E); color:#5b451a">👑</div>
+            <div><h3>ניסוח מיוחד לכלות</h3></div>
+          </div>
+          <div class="smart-note" style="background:var(--panel)">
+            💡 <b>איך זה עובד:</b> ברגע שהמערכת מזהה שמדובר בכלה (בהודעת הפתיחה או באמצע השיחה) — היא עוברת אוטומטית לניסוח שכאן.
+            אם התגלה רק בסוף — לפחות <b>הודעת הסיום</b> תהיה מותאמת, וזו ההודעה שנשארת בזיכרון.
+            <br>שדה ריק = ישתמש בניסוח הרגיל.
+          </div>
+          <div class="field"><label>שאלה 1 — שם</label><textarea id="bq0"></textarea></div>
+          <div class="field"><label>שאלה 2 — מתי ואיפה</label><textarea id="bq1"></textarea></div>
+          <div class="field"><label>שאלה 3 — שירות</label><textarea id="bq2"></textarea></div>
+          <div class="field"><label>הודעת סיום</label><textarea id="bThanks" style="min-height:90px"></textarea></div>
+          <div class="var-chips" data-for="bThanks"></div>
+          <button class="btn btn-ghost btn-block" id="saveBrideCopy">שמירת הניסוח לכלות</button>
+        </div>
         </div>
       </div>
 
@@ -2515,6 +2534,9 @@ function renderAutomations(){
   $('sendStart').value = setVal('send_start');
   $('sendEnd').value   = setVal('send_end');
   $('popupThanksText').value = setVal('popup_thanks');
+  const bq = setVal('popup_questions_bride') || [];
+  if($('bq0')){ $('bq0').value = bq[0]||''; $('bq1').value = bq[1]||''; $('bq2').value = bq[2]||'';
+                   $('bThanks').value = setVal('popup_thanks_bride') || ''; }
   $('setWindowMinutes').value = setVal('window_minutes');
   $('setMaxScreened').value   = setVal('max_screened');
   bind('ruleAbandon','abEnabled','abandon_enabled');
@@ -2542,6 +2564,10 @@ $('saveFollowup').addEventListener('click', async () => {
   await saveSetting('followup_message', $('fuMessage').value, 'נשמר ✓');
 });
 $('saveEvent').addEventListener('click', () => saveSetting('event_reminder_message', $('evMessage').value, 'נשמר ✓'));
+$('saveBrideCopy').addEventListener('click', async () => {
+  await saveSetting('popup_questions_bride', [$('bq0').value, $('bq1').value, $('bq2').value]);
+  await saveSetting('popup_thanks_bride', $('bThanks').value, 'הניסוח לכלות נשמר 👑');
+});
 $('savePost').addEventListener('click', async () => {
   await saveSetting('post_event_hours', Number($('peHours').value) || 48);
   await saveSetting('post_event_message', $('peMessage').value, 'נשמר ✓');
@@ -3171,6 +3197,12 @@ const SET_DEFAULTS = {
   post_event_enabled: true, post_event_hours: 48,
   post_event_message: 'היי {{name}} 💕 איזה כיף היה להיות חלק מהיום הגדול שלך! מקווה שנהנית ושהרגשת מהממת ✨\n\nאם בא לך לשמח אותי — אשמח מאוד לתגובה או תיוג שלי בסטורי/פוסט 🙏 זה עוזר לי יותר מכל דבר, וכמובן שאשמח גם להמלצה חמה לחברות שמתחתנות 💍',
   send_start: '08:30', send_end: '21:30',
+  popup_questions_bride: [
+    'מזל טוב!! 💍✨ כאן איה — ואיזה כיף שפנית אליי!\nאיך קוראים לך?',
+    'נעים מאוד {{name}} 🥂\nספרי לי — מתי החתונה, ואיפה היא מתקיימת?',
+    'מתרגשת בשבילך {{name}} 💍\nומה חשוב לך שאדאג לו ביום הגדול — איפור, תסרוקת, או שתיהם?'
+  ],
+  popup_thanks_bride: 'תודה {{name}} יקרה 💕\nרשמתי הכל, ואני חוזרת אלייך אישית עוד היום.\nלהיות חלק מהיום הכי חשוב שלך — זו זכות בשבילי 💍✨',
 };
 const setVal = k => settingsMap[k] !== undefined && settingsMap[k] !== null ? settingsMap[k] : SET_DEFAULTS[k];
 

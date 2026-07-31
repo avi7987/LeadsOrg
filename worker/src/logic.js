@@ -185,6 +185,26 @@ function harvest(text, answers) {
   return found;
 }
 
+// ── טון אישי לכלות ──
+// ברגע שמזוהה שמדובר בכלה (בהודעת הפתיחה או באמצע השיחה) — כל ההודעות מכאן
+// והלאה עוברות לניסוח החם יותר. גם אם התגלה רק בסוף — הודעת הסיום תהיה מותאמת.
+function markBride(text, answers) {
+  if (!answers.__bride && detectBride(text)) {
+    answers.__bride = true;
+    console.log('   👑 זוהתה כלה — עוברים לניסוח אישי');
+  }
+  return !!answers.__bride;
+}
+// בחירת הניסוח: גרסת כלה אם קיימת ולא ריקה, אחרת הרגילה
+function qText(cfg, step, isBride) {
+  const b = isBride && cfg.popupQuestionsBride && cfg.popupQuestionsBride[step];
+  return (b && b.trim()) ? b : cfg.popupQuestions[step];
+}
+function thanksText(cfg, isBride) {
+  const b = isBride && cfg.popupThanksBride;
+  return (b && b.trim()) ? b : cfg.popupThanks;
+}
+
 // השאלה הבאה שבאמת צריך לשאול (מדלגת על שאלות שהנתון שלהן כבר קיים)
 function nextAskStep(from, questions, answers) {
   for (let i = from; i < questions.length; i++) {
@@ -200,6 +220,7 @@ async function startPopup({ client, phone, leadId, cfg, seed = '' }) {
   // מה שכבר ידוע מההודעה שפתחה את השיחה
   const answers = harvest(seed, {});
   answers.__last = new Date().toISOString();   // חתימת פעילות — לחישוב תזכורת נטישה
+  const bride = markBride(seed, answers);
   if (Object.keys(answers).length) console.log(`   🎯 זוהה מראש: ${JSON.stringify(answers)}`);
   const step = nextAskStep(0, questions, answers);
   await db.createPopupSession(phone, leadId);
@@ -208,7 +229,7 @@ async function startPopup({ client, phone, leadId, cfg, seed = '' }) {
     return finalizePopup({ client, phone, answers, cfg, leadId, isTest: false });
   }
   await db.updatePopupSession(phone, { step, answers });
-  await sendText(client, phone, fill(questions[step], answers));
+  await sendText(client, phone, fill(qText(cfg, step, bride), answers));
 }
 
 async function handlePopupAnswer({ client, phone, body, session, cfg }) {
@@ -220,11 +241,12 @@ async function handlePopupAnswer({ client, phone, body, session, cfg }) {
   answers[field] = body;
   Object.assign(answers, harvest(body, answers));   // אולי מסרה כמה פרטים בבת אחת
   answers.__last = new Date().toISOString();        // עדכון זמן הפעילות האחרונה
+  const bride = markBride(body, answers);
 
   const next = nextAskStep(session.step + 1, questions, answers);
   if (next !== null) {
     await db.updatePopupSession(phone, { step: next, answers, nudged_at: null });
-    await sendText(client, phone, fill(questions[next], answers), isTest);   // שאלה אישית ({{name}})
+    await sendText(client, phone, fill(qText(cfg, next, bride), answers), isTest);   // שאלה אישית ({{name}})
   } else {
     await finalizePopup({ client, phone, answers, cfg, leadId: session.lead_id, isTest });
   }
@@ -248,7 +270,7 @@ async function finalizePopup({ client, phone, answers, cfg, leadId, isTest }) {
   if (extras.length) note += ` · ${extras.join(' · ')}`;
 
   // זיהוי כלה — מכלל התשובות והשירות (מטרת-על)
-  const isBride = detectBride([svc.raw, answers.service, answers.event_date, answers.name, note].join(' ')) || svc.label === 'כלה';
+  const isBride = !!answers.__bride || detectBride([svc.raw, answers.service, answers.event_date, note].join(' ')) || svc.label === 'כלה';
 
   await db.updateLead(leadId, {
     name:       name || undefined,
@@ -259,7 +281,7 @@ async function finalizePopup({ client, phone, answers, cfg, leadId, isTest }) {
     note,
   });
   await db.deletePopupSession(phone);
-  await sendText(client, phone, fill(cfg.popupThanks, answers), isTest);
+  await sendText(client, phone, fill(thanksText(cfg, isBride), answers), isTest);
   console.log(`💾 ליד עודכן: ${name} | ${eventDate} | ${svc.label}`);
 }
 
