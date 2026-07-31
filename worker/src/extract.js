@@ -61,6 +61,28 @@ export function extractDateHint(text) {
   return out === raw && !numeric && !hebMonth ? '' : out;
 }
 
+// תשובה אחת שמכילה גם תאריך וגם מקום → מפרקת לשניהם
+// ("20.9 באולם הגן הקסום בראשל״צ" → date: "20.9", place: "אולם הגן הקסום בראשל״צ")
+// מילים שאינן חלק מהמקום — מסוננות כמילים שלמות בלבד (כדי לא לפגוע ב"ירושלים"/"ראשל״צ")
+const PLACE_NOISE = new Set(['תאריך','בתאריך','יום','בערך','בסביבות','בחודש','החתונה','האירוע','האירועים',
+  'תהיה','יהיה','מתקיים','מתקיימת','נערך','נערכת','זה','של','שלנו','אצל','לנו','אנחנו','עדיין','לא',
+  'יודעת','יודע','בטוחה','בטוח','איפה','מתי','עוד','אולי','כנראה','נראה','ליד','את','אני','הוא','היא']);
+
+export function splitDateAndPlace(text) {
+  const raw = (text || '').trim();
+  if (!raw) return { date: '', place: '' };
+  const date = extractDateHint(raw);
+  let place = raw;
+  place = place.replace(/(\d{1,2})\s*[.\/\-]\s*(\d{1,2})(?:\s*[.\/\-]\s*(\d{2,4}))?/g, ' ');   // תאריך מספרי
+  place = place.replace(/\d+/g, ' ').replace(/[,\-–—]/g, ' ');                                  // מספרים ופיסוק
+  // סינון ברמת מילה שלמה (כולל שמות חודשים ומילות קישור)
+  place = place.split(/\s+/)
+    .filter(w => w && w.length > 1 && !PLACE_NOISE.has(w) && !HE_MONTHS[w] && !HE_MONTHS[w.replace(/^ב/, '')])
+    .join(' ').trim();
+  if (place.replace(/[^א-תa-zA-Z]/g, '').length < 2) place = '';
+  return { date, place };
+}
+
 // טקסט חופשי → תאריך אמיתי (Date). אם אין שנה — בוחר את המופע הבא בעתיד.
 export function parseEventDate(text) {
   const raw = (text || '').trim();

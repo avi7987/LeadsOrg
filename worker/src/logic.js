@@ -4,7 +4,7 @@
 // =====================================================================
 import * as db from './db.js';
 import { fill, cleanName, classifyService, normalizeDate, detectBride,
-         extractNameExplicit, extractDateHint } from './extract.js';
+         extractNameExplicit, extractDateHint, splitDateAndPlace } from './extract.js';
 
 const waId = phone => `${phone}@c.us`;                 // המרה למזהה צ'אט של whatsapp-web.js
 const norm = s => (s || '').toString().toLowerCase().trim();
@@ -233,7 +233,10 @@ async function handlePopupAnswer({ client, phone, body, session, cfg }) {
 // ── סיום: זיהוי חכם של התשובות → שדות מדויקים לליד ──
 async function finalizePopup({ client, phone, answers, cfg, leadId, isTest }) {
   const name      = cleanName(answers.name);
-  const eventDate = normalizeDate(answers.event_date);
+  // התשובה על 'מתי ואיפה' מכילה את שניהם — מפרקים
+  const dp        = splitDateAndPlace(answers.event_date);
+  const eventDate = normalizeDate(dp.date || answers.event_date);
+  const location  = answers.location || dp.place;
   const svc       = classifyService(answers.service);
 
   // שומרים גם את מילות הלקוחה המקוריות + כל תשובה נוספת
@@ -251,6 +254,7 @@ async function finalizePopup({ client, phone, answers, cfg, leadId, isTest }) {
     name:       name || undefined,
     event_date: eventDate || undefined,
     service:    svc.label || undefined,
+    location:   location || undefined,
     is_bride:   isBride ? true : undefined,
     note,
   });
